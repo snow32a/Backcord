@@ -1,0 +1,14 @@
+CompileFlags:
+  CompilationDatabase: .
+  Remove:
+    - "-I/usr/include/pidgin"
+    - "-I/usr/include/gtk*"
+    - "-I/usr/include/glib*"
+    - "-I/usr/include/pango*"
+    - "-I/usr/include/libpurple"
+    - "-I/usr/lib/glib*"
+    - "-pthread"
+  Add:
+    - "--target=i686-w64-mingw32"
+    - "-I/usr/i686-w64-mingw32/include"
+    - "-I/usr/lib/gcc/i686-w64-mingw32/12/include"

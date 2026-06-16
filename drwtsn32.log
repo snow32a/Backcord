@@ -1,0 +1,2290 @@
+
+Microsoft (R) Windows NT (TM) Version 4.00 DrWtsn32
+Copyright (C) 1985-1996 Microsoft Corp. All rights reserved.
+
+
+
+Application exception occurred:
+        App:  (pid=66)
+        When: 12/17/2025 @ 1:15:11.812
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  73 NDDEAGNT.exe
+  77 EXPLORER.exe
+  87 VMwareTray.exe
+  80 SPOOLSS.exe
+  95 RPCSS.exe
+  99 VMwareService.e.exe
+ 114 PSTORES.exe
+ 124 rundll32.exe
+  66 EveryDiscord.ex.exe
+ 127 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x53
+
+eax=00822a80 ebx=00670bc0 ecx=00000100 edx=00e1ba30 esi=00822a80 edi=00000000
+eip=006705f4 esp=0022f1dc ebp=0090dcb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        006705d0 55               push    ebp
+        006705d1 53               push    ebx
+        006705d2 85c0             test    eax,eax
+        006705d4 0f8412050000     je      00670aec
+        006705da 85d2             test    edx,edx
+        006705dc 0f840a050000     je      00670aec
+        006705e2 e800000000       call    006705e7
+        006705e7 5b               pop     ebx
+        006705e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:00671199=66000000
+        006705ee 8d2db4dc9000     lea     ebp,[0090dcb4]         ds:0090dcb4=078bffff
+FAULT ->006705f4 0f10             ???
+        006705f6 000f             add     [edi],cl                     ds:00000000=??
+        006705f8 57               push    edi
+        006705f9 e48b             in      al,8b
+        006705fb 6d               insd
+        006705fc 048d             add     al,0x8d
+        006705fe 52               push    edx
+        006705ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        00670605 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0067060b 000f             add     [edi],cl                     ds:00000000=??
+        0067060d 841e             test    [esi],bl                     ds:00822a80=00
+        0067060f 0300             add     eax,[eax]              ds:00822a80=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+0090dcb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e1 00 00 00 00 00 - 11 0b 67 00 75 e3 5c 00  ..........g.u.\.
+0022f1ec  80 2a 82 00 00 01 00 00 - 30 ba e1 00 04 00 00 00  .*......0.......
+0022f1fc  ff ff ff ff b0 a5 5c 00 - b0 b9 e1 00 73 57 66 00  ......\.....sWf.
+0022f20c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 02 00 00 00  .....*.. .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dd 00 10 b9 e1 00 - b0 56 66 00 c0 6f 51 00  .(.......Vf..oQ.
+0022f24c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 00 00 00 00  .....*.. .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e1 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  80 2a 82 00 00 00 00 00 - 00 00 00 00 00 00 00 00  .*..............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e1 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e1 00 1c 6d 54 00  ...x....P....mT.
+0022f2cc  10 b9 e1 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e1 00 bf 33 51 00  ...x.."......3Q.
+0022f2ec  9c 00 00 00 e0 b4 7c 00 - 4c 00 00 00 94 f3 22 00  ......|.L.....".
+0022f2fc  b0 b2 e1 00 50 b3 e1 00 - 30 00 00 00 be dc 63 00  ....P...0.....c.
+0022f30c  80 2a 82 00 00 00 00 00 - 01 00 00 00 00 00 00 00  .*..............
+
+
+
+Application exception occurred:
+        App:  (pid=139)
+        When: 12/17/2025 @ 1:16:32.250
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  73 NDDEAGNT.exe
+  77 EXPLORER.exe
+  87 VMwareTray.exe
+  80 SPOOLSS.exe
+  95 RPCSS.exe
+  99 VMwareService.e.exe
+ 114 PSTORES.exe
+ 124 rundll32.exe
+ 142 LegacyResource..exe
+ 131 LegacyResource..exe
+ 139 EveryDiscord.ex.exe
+  83 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x27
+
+eax=00822a80 ebx=00670bc0 ecx=00000100 edx=00e1ba30 esi=00822a80 edi=00000000
+eip=006705f4 esp=0022f1dc ebp=0090dcb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        006705d0 55               push    ebp
+        006705d1 53               push    ebx
+        006705d2 85c0             test    eax,eax
+        006705d4 0f8412050000     je      00670aec
+        006705da 85d2             test    edx,edx
+        006705dc 0f840a050000     je      00670aec
+        006705e2 e800000000       call    006705e7
+        006705e7 5b               pop     ebx
+        006705e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:00671199=66000000
+        006705ee 8d2db4dc9000     lea     ebp,[0090dcb4]         ds:0090dcb4=078bffff
+FAULT ->006705f4 0f10             ???
+        006705f6 000f             add     [edi],cl                     ds:00000000=??
+        006705f8 57               push    edi
+        006705f9 e48b             in      al,8b
+        006705fb 6d               insd
+        006705fc 048d             add     al,0x8d
+        006705fe 52               push    edx
+        006705ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        00670605 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0067060b 000f             add     [edi],cl                     ds:00000000=??
+        0067060d 841e             test    [esi],bl                     ds:00822a80=00
+        0067060f 0300             add     eax,[eax]              ds:00822a80=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+0090dcb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e1 00 00 00 00 00 - 11 0b 67 00 75 e3 5c 00  ..........g.u.\.
+0022f1ec  80 2a 82 00 00 01 00 00 - 30 ba e1 00 04 00 00 00  .*......0.......
+0022f1fc  ff ff ff ff b0 a5 5c 00 - b0 b9 e1 00 73 57 66 00  ......\.....sWf.
+0022f20c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 02 00 00 00  .....*.. .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dd 00 10 b9 e1 00 - b0 56 66 00 c0 6f 51 00  .(.......Vf..oQ.
+0022f24c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 00 00 00 00  .....*.. .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e1 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  80 2a 82 00 00 00 00 00 - 00 00 00 00 00 00 00 00  .*..............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e1 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e1 00 1c 6d 54 00  ...x....P....mT.
+0022f2cc  10 b9 e1 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e1 00 bf 33 51 00  ...x.."......3Q.
+0022f2ec  9c 00 00 00 e0 b4 7c 00 - 4c 00 00 00 94 f3 22 00  ......|.L.....".
+0022f2fc  b0 b2 e1 00 50 b3 e1 00 - 30 00 00 00 be dc 63 00  ....P...0.....c.
+0022f30c  80 2a 82 00 00 00 00 00 - 01 00 00 00 00 00 00 00  .*..............
+
+
+
+Application exception occurred:
+        App:  (pid=39)
+        When: 12/17/2025 @ 17:36:51.578
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  73 NDDEAGNT.exe
+  77 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  65 RPCSS.exe
+  99 VMwareService.e.exe
+ 113 PSTORES.exe
+  39 EveryDiscord.ex.exe
+  44 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x78
+
+eax=00822a80 ebx=00670bc0 ecx=00000100 edx=00e1ba30 esi=00822a80 edi=00000000
+eip=006705f4 esp=0022f1dc ebp=0090dcb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        006705d0 55               push    ebp
+        006705d1 53               push    ebx
+        006705d2 85c0             test    eax,eax
+        006705d4 0f8412050000     je      00670aec
+        006705da 85d2             test    edx,edx
+        006705dc 0f840a050000     je      00670aec
+        006705e2 e800000000       call    006705e7
+        006705e7 5b               pop     ebx
+        006705e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:00671199=66000000
+        006705ee 8d2db4dc9000     lea     ebp,[0090dcb4]         ds:0090dcb4=078bffff
+FAULT ->006705f4 0f10             ???
+        006705f6 000f             add     [edi],cl                     ds:00000000=??
+        006705f8 57               push    edi
+        006705f9 e48b             in      al,8b
+        006705fb 6d               insd
+        006705fc 048d             add     al,0x8d
+        006705fe 52               push    edx
+        006705ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        00670605 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0067060b 000f             add     [edi],cl                     ds:00000000=??
+        0067060d 841e             test    [esi],bl                     ds:00822a80=00
+        0067060f 0300             add     eax,[eax]              ds:00822a80=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+0090dcb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e1 00 00 00 00 00 - 11 0b 67 00 75 e3 5c 00  ..........g.u.\.
+0022f1ec  80 2a 82 00 00 01 00 00 - 30 ba e1 00 04 00 00 00  .*......0.......
+0022f1fc  ff ff ff ff b0 a5 5c 00 - b0 b9 e1 00 73 57 66 00  ......\.....sWf.
+0022f20c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 02 00 00 00  .....*.. .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dd 00 10 b9 e1 00 - b0 56 66 00 c0 6f 51 00  .(.......Vf..oQ.
+0022f24c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 00 00 00 00  .....*.. .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e1 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  80 2a 82 00 00 00 00 00 - 00 00 00 00 00 00 00 00  .*..............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e1 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e1 00 1c 6d 54 00  ...x....P....mT.
+0022f2cc  10 b9 e1 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e1 00 bf 33 51 00  ...x.."......3Q.
+0022f2ec  9c 00 00 00 e0 b4 7c 00 - 4c 00 00 00 94 f3 22 00  ......|.L.....".
+0022f2fc  b0 b2 e1 00 50 b3 e1 00 - 30 00 00 00 be dc 63 00  ....P...0.....c.
+0022f30c  80 2a 82 00 00 00 00 00 - 01 00 00 00 00 00 00 00  .*..............
+
+
+
+Application exception occurred:
+        App:  (pid=138)
+        When: 12/17/2025 @ 17:37:37.562
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  73 NDDEAGNT.exe
+  77 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  65 RPCSS.exe
+  99 VMwareService.e.exe
+ 113 PSTORES.exe
+ 131 LegacyResource..exe
+ 133 EveryDiscord.ex.exe
+ 138 EveryDiscord.ex.exe
+ 142 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x89
+
+eax=00822a80 ebx=00670bc0 ecx=00000100 edx=00e1ba30 esi=00822a80 edi=00000000
+eip=006705f4 esp=0022f1dc ebp=0090dcb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        006705d0 55               push    ebp
+        006705d1 53               push    ebx
+        006705d2 85c0             test    eax,eax
+        006705d4 0f8412050000     je      00670aec
+        006705da 85d2             test    edx,edx
+        006705dc 0f840a050000     je      00670aec
+        006705e2 e800000000       call    006705e7
+        006705e7 5b               pop     ebx
+        006705e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:00671199=66000000
+        006705ee 8d2db4dc9000     lea     ebp,[0090dcb4]         ds:0090dcb4=078bffff
+FAULT ->006705f4 0f10             ???
+        006705f6 000f             add     [edi],cl                     ds:00000000=??
+        006705f8 57               push    edi
+        006705f9 e48b             in      al,8b
+        006705fb 6d               insd
+        006705fc 048d             add     al,0x8d
+        006705fe 52               push    edx
+        006705ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        00670605 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0067060b 000f             add     [edi],cl                     ds:00000000=??
+        0067060d 841e             test    [esi],bl                     ds:00822a80=00
+        0067060f 0300             add     eax,[eax]              ds:00822a80=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+0090dcb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e1 00 00 00 00 00 - 11 0b 67 00 75 e3 5c 00  ..........g.u.\.
+0022f1ec  80 2a 82 00 00 01 00 00 - 30 ba e1 00 04 00 00 00  .*......0.......
+0022f1fc  ff ff ff ff b0 a5 5c 00 - b0 b9 e1 00 73 57 66 00  ......\.....sWf.
+0022f20c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 02 00 00 00  .....*.. .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dd 00 10 b9 e1 00 - b0 56 66 00 c0 6f 51 00  .(.......Vf..oQ.
+0022f24c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 00 00 00 00  .....*.. .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e1 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  80 2a 82 00 00 00 00 00 - 00 00 00 00 00 00 00 00  .*..............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e1 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e1 00 1c 6d 54 00  ...x....P....mT.
+0022f2cc  10 b9 e1 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e1 00 bf 33 51 00  ...x.."......3Q.
+0022f2ec  9c 00 00 00 e0 b4 7c 00 - 4c 00 00 00 94 f3 22 00  ......|.L.....".
+0022f2fc  b0 b2 e1 00 50 b3 e1 00 - 30 00 00 00 be dc 63 00  ....P...0.....c.
+0022f30c  80 2a 82 00 00 00 00 00 - 01 00 00 00 00 00 00 00  .*..............
+
+
+
+Application exception occurred:
+        App:  (pid=108)
+        When: 12/17/2025 @ 17:37:59.78
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  73 NDDEAGNT.exe
+  77 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  65 RPCSS.exe
+  99 VMwareService.e.exe
+ 113 PSTORES.exe
+ 131 LegacyResource..exe
+ 133 EveryDiscord.ex.exe
+ 108 EveryDiscord.ex.exe
+  57 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x42
+
+eax=00822a80 ebx=00670bc0 ecx=00000100 edx=00e1ba30 esi=00822a80 edi=00000000
+eip=006705f4 esp=0022f1dc ebp=0090dcb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        006705d0 55               push    ebp
+        006705d1 53               push    ebx
+        006705d2 85c0             test    eax,eax
+        006705d4 0f8412050000     je      00670aec
+        006705da 85d2             test    edx,edx
+        006705dc 0f840a050000     je      00670aec
+        006705e2 e800000000       call    006705e7
+        006705e7 5b               pop     ebx
+        006705e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:00671199=66000000
+        006705ee 8d2db4dc9000     lea     ebp,[0090dcb4]         ds:0090dcb4=078bffff
+FAULT ->006705f4 0f10             ???
+        006705f6 000f             add     [edi],cl                     ds:00000000=??
+        006705f8 57               push    edi
+        006705f9 e48b             in      al,8b
+        006705fb 6d               insd
+        006705fc 048d             add     al,0x8d
+        006705fe 52               push    edx
+        006705ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        00670605 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0067060b 000f             add     [edi],cl                     ds:00000000=??
+        0067060d 841e             test    [esi],bl                     ds:00822a80=00
+        0067060f 0300             add     eax,[eax]              ds:00822a80=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+0090dcb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e1 00 00 00 00 00 - 11 0b 67 00 75 e3 5c 00  ..........g.u.\.
+0022f1ec  80 2a 82 00 00 01 00 00 - 30 ba e1 00 04 00 00 00  .*......0.......
+0022f1fc  ff ff ff ff b0 a5 5c 00 - b0 b9 e1 00 73 57 66 00  ......\.....sWf.
+0022f20c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 02 00 00 00  .....*.. .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dd 00 10 b9 e1 00 - b0 56 66 00 c0 6f 51 00  .(.......Vf..oQ.
+0022f24c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 00 00 00 00  .....*.. .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e1 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  80 2a 82 00 00 00 00 00 - 00 00 00 00 00 00 00 00  .*..............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e1 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e1 00 1c 6d 54 00  ...x....P....mT.
+0022f2cc  10 b9 e1 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e1 00 bf 33 51 00  ...x.."......3Q.
+0022f2ec  9c 00 00 00 e0 b4 7c 00 - 4c 00 00 00 94 f3 22 00  ......|.L.....".
+0022f2fc  b0 b2 e1 00 50 b3 e1 00 - 30 00 00 00 be dc 63 00  ....P...0.....c.
+0022f30c  80 2a 82 00 00 00 00 00 - 01 00 00 00 00 00 00 00  .*..............
+
+
+
+Application exception occurred:
+        App:  (pid=134)
+        When: 12/17/2025 @ 17:43:23.734
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  73 NDDEAGNT.exe
+  77 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  65 RPCSS.exe
+  99 VMwareService.e.exe
+ 113 PSTORES.exe
+ 131 LegacyResource..exe
+ 133 EveryDiscord.ex.exe
+ 134 EveryDiscord.ex.exe
+  44 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x78
+
+eax=00822a80 ebx=00670bc0 ecx=00000100 edx=00e1ba30 esi=00822a80 edi=00000000
+eip=006705f4 esp=0022f1dc ebp=0090dcb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        006705d0 55               push    ebp
+        006705d1 53               push    ebx
+        006705d2 85c0             test    eax,eax
+        006705d4 0f8412050000     je      00670aec
+        006705da 85d2             test    edx,edx
+        006705dc 0f840a050000     je      00670aec
+        006705e2 e800000000       call    006705e7
+        006705e7 5b               pop     ebx
+        006705e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:00671199=66000000
+        006705ee 8d2db4dc9000     lea     ebp,[0090dcb4]         ds:0090dcb4=078bffff
+FAULT ->006705f4 0f10             ???
+        006705f6 000f             add     [edi],cl                     ds:00000000=??
+        006705f8 57               push    edi
+        006705f9 e48b             in      al,8b
+        006705fb 6d               insd
+        006705fc 048d             add     al,0x8d
+        006705fe 52               push    edx
+        006705ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        00670605 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0067060b 000f             add     [edi],cl                     ds:00000000=??
+        0067060d 841e             test    [esi],bl                     ds:00822a80=00
+        0067060f 0300             add     eax,[eax]              ds:00822a80=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+0090dcb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e1 00 00 00 00 00 - 11 0b 67 00 75 e3 5c 00  ..........g.u.\.
+0022f1ec  80 2a 82 00 00 01 00 00 - 30 ba e1 00 04 00 00 00  .*......0.......
+0022f1fc  ff ff ff ff b0 a5 5c 00 - b0 b9 e1 00 73 57 66 00  ......\.....sWf.
+0022f20c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 02 00 00 00  .....*.. .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dd 00 10 b9 e1 00 - b0 56 66 00 c0 6f 51 00  .(.......Vf..oQ.
+0022f24c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 00 00 00 00  .....*.. .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e1 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  80 2a 82 00 00 00 00 00 - 00 00 00 00 00 00 00 00  .*..............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e1 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e1 00 1c 6d 54 00  ...x....P....mT.
+0022f2cc  10 b9 e1 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e1 00 bf 33 51 00  ...x.."......3Q.
+0022f2ec  9c 00 00 00 e0 b4 7c 00 - 4c 00 00 00 94 f3 22 00  ......|.L.....".
+0022f2fc  b0 b2 e1 00 50 b3 e1 00 - 30 00 00 00 be dc 63 00  ....P...0.....c.
+0022f30c  80 2a 82 00 00 00 00 00 - 01 00 00 00 00 00 00 00  .*..............
+
+
+
+Application exception occurred:
+        App:  (pid=74)
+        When: 12/17/2025 @ 17:43:31.171
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  73 NDDEAGNT.exe
+  77 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  65 RPCSS.exe
+  99 VMwareService.e.exe
+ 113 PSTORES.exe
+ 131 LegacyResource..exe
+ 133 EveryDiscord.ex.exe
+  74 EveryDiscord.ex.exe
+ 138 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x80
+
+eax=00822a80 ebx=00670bc0 ecx=00000100 edx=00e1ba30 esi=00822a80 edi=00000000
+eip=006705f4 esp=0022f1dc ebp=0090dcb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        006705d0 55               push    ebp
+        006705d1 53               push    ebx
+        006705d2 85c0             test    eax,eax
+        006705d4 0f8412050000     je      00670aec
+        006705da 85d2             test    edx,edx
+        006705dc 0f840a050000     je      00670aec
+        006705e2 e800000000       call    006705e7
+        006705e7 5b               pop     ebx
+        006705e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:00671199=66000000
+        006705ee 8d2db4dc9000     lea     ebp,[0090dcb4]         ds:0090dcb4=078bffff
+FAULT ->006705f4 0f10             ???
+        006705f6 000f             add     [edi],cl                     ds:00000000=??
+        006705f8 57               push    edi
+        006705f9 e48b             in      al,8b
+        006705fb 6d               insd
+        006705fc 048d             add     al,0x8d
+        006705fe 52               push    edx
+        006705ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        00670605 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0067060b 000f             add     [edi],cl                     ds:00000000=??
+        0067060d 841e             test    [esi],bl                     ds:00822a80=00
+        0067060f 0300             add     eax,[eax]              ds:00822a80=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+0090dcb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e1 00 00 00 00 00 - 11 0b 67 00 75 e3 5c 00  ..........g.u.\.
+0022f1ec  80 2a 82 00 00 01 00 00 - 30 ba e1 00 04 00 00 00  .*......0.......
+0022f1fc  ff ff ff ff b0 a5 5c 00 - b0 b9 e1 00 73 57 66 00  ......\.....sWf.
+0022f20c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 02 00 00 00  .....*.. .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dd 00 10 b9 e1 00 - b0 56 66 00 c0 6f 51 00  .(.......Vf..oQ.
+0022f24c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 00 00 00 00  .....*.. .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e1 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  80 2a 82 00 00 00 00 00 - 00 00 00 00 00 00 00 00  .*..............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e1 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e1 00 1c 6d 54 00  ...x....P....mT.
+0022f2cc  10 b9 e1 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e1 00 bf 33 51 00  ...x.."......3Q.
+0022f2ec  9c 00 00 00 e0 b4 7c 00 - 4c 00 00 00 94 f3 22 00  ......|.L.....".
+0022f2fc  b0 b2 e1 00 50 b3 e1 00 - 30 00 00 00 be dc 63 00  ....P...0.....c.
+0022f30c  80 2a 82 00 00 00 00 00 - 01 00 00 00 00 00 00 00  .*..............
+
+
+
+Application exception occurred:
+        App:  (pid=70)
+        When: 12/17/2025 @ 17:44:52.156
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  73 NDDEAGNT.exe
+  77 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  65 RPCSS.exe
+  99 VMwareService.e.exe
+ 113 PSTORES.exe
+ 131 LegacyResource..exe
+ 133 EveryDiscord.ex.exe
+  70 EveryDiscord.ex.exe
+ 141 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x76
+
+eax=00822a80 ebx=00670bc0 ecx=00000100 edx=00e1ba30 esi=00822a80 edi=00000000
+eip=006705f4 esp=0022f1dc ebp=0090dcb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        006705d0 55               push    ebp
+        006705d1 53               push    ebx
+        006705d2 85c0             test    eax,eax
+        006705d4 0f8412050000     je      00670aec
+        006705da 85d2             test    edx,edx
+        006705dc 0f840a050000     je      00670aec
+        006705e2 e800000000       call    006705e7
+        006705e7 5b               pop     ebx
+        006705e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:00671199=66000000
+        006705ee 8d2db4dc9000     lea     ebp,[0090dcb4]         ds:0090dcb4=078bffff
+FAULT ->006705f4 0f10             ???
+        006705f6 000f             add     [edi],cl                     ds:00000000=??
+        006705f8 57               push    edi
+        006705f9 e48b             in      al,8b
+        006705fb 6d               insd
+        006705fc 048d             add     al,0x8d
+        006705fe 52               push    edx
+        006705ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        00670605 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0067060b 000f             add     [edi],cl                     ds:00000000=??
+        0067060d 841e             test    [esi],bl                     ds:00822a80=00
+        0067060f 0300             add     eax,[eax]              ds:00822a80=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+0090dcb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e1 00 00 00 00 00 - 11 0b 67 00 75 e3 5c 00  ..........g.u.\.
+0022f1ec  80 2a 82 00 00 01 00 00 - 30 ba e1 00 04 00 00 00  .*......0.......
+0022f1fc  ff ff ff ff b0 a5 5c 00 - b0 b9 e1 00 73 57 66 00  ......\.....sWf.
+0022f20c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 02 00 00 00  .....*.. .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dd 00 10 b9 e1 00 - b0 56 66 00 c0 6f 51 00  .(.......Vf..oQ.
+0022f24c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 00 00 00 00  .....*.. .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e1 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  80 2a 82 00 00 00 00 00 - 00 00 00 00 00 00 00 00  .*..............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e1 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e1 00 1c 6d 54 00  ...x....P....mT.
+0022f2cc  10 b9 e1 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e1 00 bf 33 51 00  ...x.."......3Q.
+0022f2ec  9c 00 00 00 e0 b4 7c 00 - 4c 00 00 00 94 f3 22 00  ......|.L.....".
+0022f2fc  b0 b2 e1 00 50 b3 e1 00 - 30 00 00 00 be dc 63 00  ....P...0.....c.
+0022f30c  80 2a 82 00 00 00 00 00 - 01 00 00 00 00 00 00 00  .*..............
+
+
+
+Application exception occurred:
+        App:  (pid=122)
+        When: 12/17/2025 @ 17:45:14.890
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  73 NDDEAGNT.exe
+  77 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  65 RPCSS.exe
+  99 VMwareService.e.exe
+ 113 PSTORES.exe
+ 131 LegacyResource..exe
+ 133 EveryDiscord.ex.exe
+ 122 EveryDiscord.ex.exe
+  44 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x77
+
+eax=00822a80 ebx=00670bc0 ecx=00000100 edx=00e1ba30 esi=00822a80 edi=00000000
+eip=006705f4 esp=0022f1dc ebp=0090dcb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        006705d0 55               push    ebp
+        006705d1 53               push    ebx
+        006705d2 85c0             test    eax,eax
+        006705d4 0f8412050000     je      00670aec
+        006705da 85d2             test    edx,edx
+        006705dc 0f840a050000     je      00670aec
+        006705e2 e800000000       call    006705e7
+        006705e7 5b               pop     ebx
+        006705e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:00671199=66000000
+        006705ee 8d2db4dc9000     lea     ebp,[0090dcb4]         ds:0090dcb4=078bffff
+FAULT ->006705f4 0f10             ???
+        006705f6 000f             add     [edi],cl                     ds:00000000=??
+        006705f8 57               push    edi
+        006705f9 e48b             in      al,8b
+        006705fb 6d               insd
+        006705fc 048d             add     al,0x8d
+        006705fe 52               push    edx
+        006705ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        00670605 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0067060b 000f             add     [edi],cl                     ds:00000000=??
+        0067060d 841e             test    [esi],bl                     ds:00822a80=00
+        0067060f 0300             add     eax,[eax]              ds:00822a80=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+0090dcb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e1 00 00 00 00 00 - 11 0b 67 00 75 e3 5c 00  ..........g.u.\.
+0022f1ec  80 2a 82 00 00 01 00 00 - 30 ba e1 00 04 00 00 00  .*......0.......
+0022f1fc  ff ff ff ff b0 a5 5c 00 - b0 b9 e1 00 73 57 66 00  ......\.....sWf.
+0022f20c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 02 00 00 00  .....*.. .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dd 00 10 b9 e1 00 - b0 56 66 00 c0 6f 51 00  .(.......Vf..oQ.
+0022f24c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 00 00 00 00  .....*.. .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e1 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  80 2a 82 00 00 00 00 00 - 00 00 00 00 00 00 00 00  .*..............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e1 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e1 00 1c 6d 54 00  ...x....P....mT.
+0022f2cc  10 b9 e1 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e1 00 bf 33 51 00  ...x.."......3Q.
+0022f2ec  9c 00 00 00 e0 b4 7c 00 - 4c 00 00 00 94 f3 22 00  ......|.L.....".
+0022f2fc  b0 b2 e1 00 50 b3 e1 00 - 30 00 00 00 be dc 63 00  ....P...0.....c.
+0022f30c  80 2a 82 00 00 00 00 00 - 01 00 00 00 00 00 00 00  .*..............
+
+
+
+Application exception occurred:
+        App:  (pid=129)
+        When: 12/17/2025 @ 17:45:39.953
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  73 NDDEAGNT.exe
+  77 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  65 RPCSS.exe
+  99 VMwareService.e.exe
+ 113 PSTORES.exe
+ 131 LegacyResource..exe
+ 133 EveryDiscord.ex.exe
+ 129 EveryDiscord.ex.exe
+  66 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x46
+
+eax=00822a80 ebx=00670bc0 ecx=00000100 edx=00e1ba30 esi=00822a80 edi=00000000
+eip=006705f4 esp=0022f1dc ebp=0090dcb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        006705d0 55               push    ebp
+        006705d1 53               push    ebx
+        006705d2 85c0             test    eax,eax
+        006705d4 0f8412050000     je      00670aec
+        006705da 85d2             test    edx,edx
+        006705dc 0f840a050000     je      00670aec
+        006705e2 e800000000       call    006705e7
+        006705e7 5b               pop     ebx
+        006705e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:00671199=66000000
+        006705ee 8d2db4dc9000     lea     ebp,[0090dcb4]         ds:0090dcb4=078bffff
+FAULT ->006705f4 0f10             ???
+        006705f6 000f             add     [edi],cl                     ds:00000000=??
+        006705f8 57               push    edi
+        006705f9 e48b             in      al,8b
+        006705fb 6d               insd
+        006705fc 048d             add     al,0x8d
+        006705fe 52               push    edx
+        006705ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        00670605 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0067060b 000f             add     [edi],cl                     ds:00000000=??
+        0067060d 841e             test    [esi],bl                     ds:00822a80=00
+        0067060f 0300             add     eax,[eax]              ds:00822a80=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+0090dcb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e1 00 00 00 00 00 - 11 0b 67 00 75 e3 5c 00  ..........g.u.\.
+0022f1ec  80 2a 82 00 00 01 00 00 - 30 ba e1 00 04 00 00 00  .*......0.......
+0022f1fc  ff ff ff ff b0 a5 5c 00 - b0 b9 e1 00 73 57 66 00  ......\.....sWf.
+0022f20c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 02 00 00 00  .....*.. .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dd 00 10 b9 e1 00 - b0 56 66 00 c0 6f 51 00  .(.......Vf..oQ.
+0022f24c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 00 00 00 00  .....*.. .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e1 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  80 2a 82 00 00 00 00 00 - 00 00 00 00 00 00 00 00  .*..............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e1 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e1 00 1c 6d 54 00  ...x....P....mT.
+0022f2cc  10 b9 e1 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e1 00 bf 33 51 00  ...x.."......3Q.
+0022f2ec  9c 00 00 00 e0 b4 7c 00 - 4c 00 00 00 94 f3 22 00  ......|.L.....".
+0022f2fc  b0 b2 e1 00 50 b3 e1 00 - 30 00 00 00 be dc 63 00  ....P...0.....c.
+0022f30c  80 2a 82 00 00 00 00 00 - 01 00 00 00 00 00 00 00  .*..............
+
+
+
+Application exception occurred:
+        App:  (pid=135)
+        When: 12/17/2025 @ 17:46:1.906
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  73 NDDEAGNT.exe
+  77 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  65 RPCSS.exe
+  99 VMwareService.e.exe
+ 113 PSTORES.exe
+ 131 LegacyResource..exe
+ 133 EveryDiscord.ex.exe
+ 135 EveryDiscord.ex.exe
+ 140 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x7a
+
+eax=00822a80 ebx=00670bc0 ecx=00000100 edx=00e1ba30 esi=00822a80 edi=00000000
+eip=006705f4 esp=0022f1dc ebp=0090dcb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        006705d0 55               push    ebp
+        006705d1 53               push    ebx
+        006705d2 85c0             test    eax,eax
+        006705d4 0f8412050000     je      00670aec
+        006705da 85d2             test    edx,edx
+        006705dc 0f840a050000     je      00670aec
+        006705e2 e800000000       call    006705e7
+        006705e7 5b               pop     ebx
+        006705e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:00671199=66000000
+        006705ee 8d2db4dc9000     lea     ebp,[0090dcb4]         ds:0090dcb4=078bffff
+FAULT ->006705f4 0f10             ???
+        006705f6 000f             add     [edi],cl                     ds:00000000=??
+        006705f8 57               push    edi
+        006705f9 e48b             in      al,8b
+        006705fb 6d               insd
+        006705fc 048d             add     al,0x8d
+        006705fe 52               push    edx
+        006705ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        00670605 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0067060b 000f             add     [edi],cl                     ds:00000000=??
+        0067060d 841e             test    [esi],bl                     ds:00822a80=00
+        0067060f 0300             add     eax,[eax]              ds:00822a80=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+0090dcb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e1 00 00 00 00 00 - 11 0b 67 00 75 e3 5c 00  ..........g.u.\.
+0022f1ec  80 2a 82 00 00 01 00 00 - 30 ba e1 00 04 00 00 00  .*......0.......
+0022f1fc  ff ff ff ff b0 a5 5c 00 - b0 b9 e1 00 73 57 66 00  ......\.....sWf.
+0022f20c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 02 00 00 00  .....*.. .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dd 00 10 b9 e1 00 - b0 56 66 00 c0 6f 51 00  .(.......Vf..oQ.
+0022f24c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 00 00 00 00  .....*.. .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e1 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  80 2a 82 00 00 00 00 00 - 00 00 00 00 00 00 00 00  .*..............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e1 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e1 00 1c 6d 54 00  ...x....P....mT.
+0022f2cc  10 b9 e1 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e1 00 bf 33 51 00  ...x.."......3Q.
+0022f2ec  9c 00 00 00 e0 b4 7c 00 - 4c 00 00 00 94 f3 22 00  ......|.L.....".
+0022f2fc  b0 b2 e1 00 50 b3 e1 00 - 30 00 00 00 be dc 63 00  ....P...0.....c.
+0022f30c  80 2a 82 00 00 00 00 00 - 01 00 00 00 00 00 00 00  .*..............
+
+
+
+Application exception occurred:
+        App:  (pid=139)
+        When: 12/17/2025 @ 17:46:37.546
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  73 NDDEAGNT.exe
+  77 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  65 RPCSS.exe
+  99 VMwareService.e.exe
+ 113 PSTORES.exe
+ 131 LegacyResource..exe
+ 133 EveryDiscord.ex.exe
+ 139 EveryDiscord.ex.exe
+ 135 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x4a
+
+eax=00822a80 ebx=00670bc0 ecx=00000100 edx=00e1ba30 esi=00822a80 edi=00000000
+eip=006705f4 esp=0022f1dc ebp=0090dcb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        006705d0 55               push    ebp
+        006705d1 53               push    ebx
+        006705d2 85c0             test    eax,eax
+        006705d4 0f8412050000     je      00670aec
+        006705da 85d2             test    edx,edx
+        006705dc 0f840a050000     je      00670aec
+        006705e2 e800000000       call    006705e7
+        006705e7 5b               pop     ebx
+        006705e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:00671199=66000000
+        006705ee 8d2db4dc9000     lea     ebp,[0090dcb4]         ds:0090dcb4=078bffff
+FAULT ->006705f4 0f10             ???
+        006705f6 000f             add     [edi],cl                     ds:00000000=??
+        006705f8 57               push    edi
+        006705f9 e48b             in      al,8b
+        006705fb 6d               insd
+        006705fc 048d             add     al,0x8d
+        006705fe 52               push    edx
+        006705ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        00670605 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0067060b 000f             add     [edi],cl                     ds:00000000=??
+        0067060d 841e             test    [esi],bl                     ds:00822a80=00
+        0067060f 0300             add     eax,[eax]              ds:00822a80=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+0090dcb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e1 00 00 00 00 00 - 11 0b 67 00 75 e3 5c 00  ..........g.u.\.
+0022f1ec  80 2a 82 00 00 01 00 00 - 30 ba e1 00 04 00 00 00  .*......0.......
+0022f1fc  ff ff ff ff b0 a5 5c 00 - b0 b9 e1 00 73 57 66 00  ......\.....sWf.
+0022f20c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 02 00 00 00  .....*.. .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dd 00 10 b9 e1 00 - b0 56 66 00 c0 6f 51 00  .(.......Vf..oQ.
+0022f24c  b0 b9 e1 00 80 2a 82 00 - 20 00 00 00 00 00 00 00  .....*.. .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e1 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  80 2a 82 00 00 00 00 00 - 00 00 00 00 00 00 00 00  .*..............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e1 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e1 00 1c 6d 54 00  ...x....P....mT.
+0022f2cc  10 b9 e1 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e1 00 bf 33 51 00  ...x.."......3Q.
+0022f2ec  9c 00 00 00 e0 b4 7c 00 - 4c 00 00 00 94 f3 22 00  ......|.L.....".
+0022f2fc  b0 b2 e1 00 50 b3 e1 00 - 30 00 00 00 be dc 63 00  ....P...0.....c.
+0022f30c  80 2a 82 00 00 00 00 00 - 01 00 00 00 00 00 00 00  .*..............
+
+
+
+Application exception occurred:
+        App:  (pid=124)
+        When: 12/17/2025 @ 17:50:57.671
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  73 NDDEAGNT.exe
+  77 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  83 RPCSS.exe
+  97 VMwareService.e.exe
+ 112 PSTORES.exe
+ 124 EveryDiscord.ex.exe
+ 126 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x2c
+
+eax=0081ce40 ebx=0066b7c0 ecx=00000100 edx=00e0ba30 esi=0081ce40 edi=00000000
+eip=0066b1f4 esp=0022f1dc ebp=00907cb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        0066b1d0 55               push    ebp
+        0066b1d1 53               push    ebx
+        0066b1d2 85c0             test    eax,eax
+        0066b1d4 0f8412050000     je      0066b6ec
+        0066b1da 85d2             test    edx,edx
+        0066b1dc 0f840a050000     je      0066b6ec
+        0066b1e2 e800000000       call    0066b1e7
+        0066b1e7 5b               pop     ebx
+        0066b1e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:0066bd99=66000000
+        0066b1ee 8d2db47c9000     lea     ebp,[00907cb4]         ds:00907cb4=078bffff
+FAULT ->0066b1f4 0f10             ???
+        0066b1f6 000f             add     [edi],cl                     ds:00000000=??
+        0066b1f8 57               push    edi
+        0066b1f9 e48b             in      al,8b
+        0066b1fb 6d               insd
+        0066b1fc 048d             add     al,0x8d
+        0066b1fe 52               push    edx
+        0066b1ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        0066b205 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0066b20b 000f             add     [edi],cl                     ds:00000000=??
+        0066b20d 841e             test    [esi],bl                     ds:0081ce40=00
+        0066b20f 0300             add     eax,[eax]              ds:0081ce40=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+00907cb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e0 00 00 00 00 00 - 11 b7 66 00 75 8f 5c 00  ..........f.u.\.
+0022f1ec  40 ce 81 00 00 01 00 00 - 30 ba e0 00 04 00 00 00  @.......0.......
+0022f1fc  ff ff ff ff b0 51 5c 00 - b0 b9 e0 00 73 03 66 00  .....Q\.....s.f.
+0022f20c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 02 00 00 00  ....@... .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dc 00 10 b9 e0 00 - b0 02 66 00 c0 6b 51 00  .(........f..kQ.
+0022f24c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 00 00 00 00  ....@... .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e0 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  40 ce 81 00 00 00 00 00 - 00 00 00 00 00 00 00 00  @...............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e0 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e0 00 bc 68 54 00  ...x....P....hT.
+0022f2cc  10 b9 e0 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e0 00 bf 2f 51 00  ...x.."....../Q.
+0022f2ec  9c 00 00 00 00 65 7c 00 - 4c 00 00 00 94 f3 22 00  .....e|.L.....".
+0022f2fc  b0 b2 e0 00 50 b3 e0 00 - 30 00 00 00 be 88 63 00  ....P...0.....c.
+0022f30c  40 ce 81 00 00 00 00 00 - 01 00 00 00 00 00 00 00  @...............
+
+
+
+Application exception occurred:
+        App:  (pid=133)
+        When: 12/17/2025 @ 17:51:21.421
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  73 NDDEAGNT.exe
+  77 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  83 RPCSS.exe
+  97 VMwareService.e.exe
+ 112 PSTORES.exe
+ 133 EveryDiscord.ex.exe
+ 136 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x84
+
+eax=0081ce40 ebx=0066b7c0 ecx=00000100 edx=00e0ba30 esi=0081ce40 edi=00000000
+eip=0066b1f4 esp=0022f1dc ebp=00907cb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        0066b1d0 55               push    ebp
+        0066b1d1 53               push    ebx
+        0066b1d2 85c0             test    eax,eax
+        0066b1d4 0f8412050000     je      0066b6ec
+        0066b1da 85d2             test    edx,edx
+        0066b1dc 0f840a050000     je      0066b6ec
+        0066b1e2 e800000000       call    0066b1e7
+        0066b1e7 5b               pop     ebx
+        0066b1e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:0066bd99=66000000
+        0066b1ee 8d2db47c9000     lea     ebp,[00907cb4]         ds:00907cb4=078bffff
+FAULT ->0066b1f4 0f10             ???
+        0066b1f6 000f             add     [edi],cl                     ds:00000000=??
+        0066b1f8 57               push    edi
+        0066b1f9 e48b             in      al,8b
+        0066b1fb 6d               insd
+        0066b1fc 048d             add     al,0x8d
+        0066b1fe 52               push    edx
+        0066b1ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        0066b205 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0066b20b 000f             add     [edi],cl                     ds:00000000=??
+        0066b20d 841e             test    [esi],bl                     ds:0081ce40=00
+        0066b20f 0300             add     eax,[eax]              ds:0081ce40=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+00907cb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e0 00 00 00 00 00 - 11 b7 66 00 75 8f 5c 00  ..........f.u.\.
+0022f1ec  40 ce 81 00 00 01 00 00 - 30 ba e0 00 04 00 00 00  @.......0.......
+0022f1fc  ff ff ff ff b0 51 5c 00 - b0 b9 e0 00 73 03 66 00  .....Q\.....s.f.
+0022f20c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 02 00 00 00  ....@... .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dc 00 10 b9 e0 00 - b0 02 66 00 c0 6b 51 00  .(........f..kQ.
+0022f24c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 00 00 00 00  ....@... .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e0 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  40 ce 81 00 00 00 00 00 - 00 00 00 00 00 00 00 00  @...............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e0 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e0 00 bc 68 54 00  ...x....P....hT.
+0022f2cc  10 b9 e0 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e0 00 bf 2f 51 00  ...x.."....../Q.
+0022f2ec  9c 00 00 00 00 65 7c 00 - 4c 00 00 00 94 f3 22 00  .....e|.L.....".
+0022f2fc  b0 b2 e0 00 50 b3 e0 00 - 30 00 00 00 be 88 63 00  ....P...0.....c.
+0022f30c  40 ce 81 00 00 00 00 00 - 01 00 00 00 00 00 00 00  @...............
+
+
+
+Application exception occurred:
+        App:  (pid=140)
+        When: 12/17/2025 @ 17:53:57.875
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  73 NDDEAGNT.exe
+  77 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  83 RPCSS.exe
+  97 VMwareService.e.exe
+ 112 PSTORES.exe
+ 140 EveryDiscord.ex.exe
+ 142 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x8a
+
+eax=0081ce40 ebx=0066b7c0 ecx=00000100 edx=00e0ba30 esi=0081ce40 edi=00000000
+eip=0066b1f4 esp=0022f1dc ebp=00907cb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        0066b1d0 55               push    ebp
+        0066b1d1 53               push    ebx
+        0066b1d2 85c0             test    eax,eax
+        0066b1d4 0f8412050000     je      0066b6ec
+        0066b1da 85d2             test    edx,edx
+        0066b1dc 0f840a050000     je      0066b6ec
+        0066b1e2 e800000000       call    0066b1e7
+        0066b1e7 5b               pop     ebx
+        0066b1e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:0066bd99=66000000
+        0066b1ee 8d2db47c9000     lea     ebp,[00907cb4]         ds:00907cb4=078bffff
+FAULT ->0066b1f4 0f10             ???
+        0066b1f6 000f             add     [edi],cl                     ds:00000000=??
+        0066b1f8 57               push    edi
+        0066b1f9 e48b             in      al,8b
+        0066b1fb 6d               insd
+        0066b1fc 048d             add     al,0x8d
+        0066b1fe 52               push    edx
+        0066b1ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        0066b205 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0066b20b 000f             add     [edi],cl                     ds:00000000=??
+        0066b20d 841e             test    [esi],bl                     ds:0081ce40=00
+        0066b20f 0300             add     eax,[eax]              ds:0081ce40=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+00907cb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e0 00 00 00 00 00 - 11 b7 66 00 75 8f 5c 00  ..........f.u.\.
+0022f1ec  40 ce 81 00 00 01 00 00 - 30 ba e0 00 04 00 00 00  @.......0.......
+0022f1fc  ff ff ff ff b0 51 5c 00 - b0 b9 e0 00 73 03 66 00  .....Q\.....s.f.
+0022f20c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 02 00 00 00  ....@... .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dc 00 10 b9 e0 00 - b0 02 66 00 c0 6b 51 00  .(........f..kQ.
+0022f24c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 00 00 00 00  ....@... .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e0 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  40 ce 81 00 00 00 00 00 - 00 00 00 00 00 00 00 00  @...............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e0 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e0 00 bc 68 54 00  ...x....P....hT.
+0022f2cc  10 b9 e0 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e0 00 bf 2f 51 00  ...x.."....../Q.
+0022f2ec  9c 00 00 00 00 65 7c 00 - 4c 00 00 00 94 f3 22 00  .....e|.L.....".
+0022f2fc  b0 b2 e0 00 50 b3 e0 00 - 30 00 00 00 be 88 63 00  ....P...0.....c.
+0022f30c  40 ce 81 00 00 00 00 00 - 01 00 00 00 00 00 00 00  @...............
+
+
+
+Application exception occurred:
+        App:  (pid=62)
+        When: 12/18/2025 @ 14:55:13.906
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  72 NDDEAGNT.exe
+  76 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  88 RPCSS.exe
+ 100 VMwareService.e.exe
+ 111 PSTORES.exe
+  62 EveryDiscord.ex.exe
+ 124 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x27
+
+eax=0081ce40 ebx=0066b7c0 ecx=00000100 edx=00e0ba30 esi=0081ce40 edi=00000000
+eip=0066b1f4 esp=0022f1dc ebp=00907cb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        0066b1d0 55               push    ebp
+        0066b1d1 53               push    ebx
+        0066b1d2 85c0             test    eax,eax
+        0066b1d4 0f8412050000     je      0066b6ec
+        0066b1da 85d2             test    edx,edx
+        0066b1dc 0f840a050000     je      0066b6ec
+        0066b1e2 e800000000       call    0066b1e7
+        0066b1e7 5b               pop     ebx
+        0066b1e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:0066bd99=66000000
+        0066b1ee 8d2db47c9000     lea     ebp,[00907cb4]         ds:00907cb4=078bffff
+FAULT ->0066b1f4 0f10             ???
+        0066b1f6 000f             add     [edi],cl                     ds:00000000=??
+        0066b1f8 57               push    edi
+        0066b1f9 e48b             in      al,8b
+        0066b1fb 6d               insd
+        0066b1fc 048d             add     al,0x8d
+        0066b1fe 52               push    edx
+        0066b1ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        0066b205 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0066b20b 000f             add     [edi],cl                     ds:00000000=??
+        0066b20d 841e             test    [esi],bl                     ds:0081ce40=00
+        0066b20f 0300             add     eax,[eax]              ds:0081ce40=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+00907cb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e0 00 00 00 00 00 - 11 b7 66 00 75 8f 5c 00  ..........f.u.\.
+0022f1ec  40 ce 81 00 00 01 00 00 - 30 ba e0 00 04 00 00 00  @.......0.......
+0022f1fc  ff ff ff ff b0 51 5c 00 - b0 b9 e0 00 73 03 66 00  .....Q\.....s.f.
+0022f20c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 02 00 00 00  ....@... .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dc 00 10 b9 e0 00 - b0 02 66 00 c0 6b 51 00  .(........f..kQ.
+0022f24c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 00 00 00 00  ....@... .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e0 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  40 ce 81 00 00 00 00 00 - 00 00 00 00 00 00 00 00  @...............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e0 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e0 00 bc 68 54 00  ...x....P....hT.
+0022f2cc  10 b9 e0 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e0 00 bf 2f 51 00  ...x.."....../Q.
+0022f2ec  9c 00 00 00 00 65 7c 00 - 4c 00 00 00 94 f3 22 00  .....e|.L.....".
+0022f2fc  b0 b2 e0 00 50 b3 e0 00 - 30 00 00 00 be 88 63 00  ....P...0.....c.
+0022f30c  40 ce 81 00 00 00 00 00 - 01 00 00 00 00 00 00 00  @...............
+
+
+
+Application exception occurred:
+        App:  (pid=116)
+        When: 12/18/2025 @ 14:57:6.796
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  72 NDDEAGNT.exe
+  76 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  88 RPCSS.exe
+ 100 VMwareService.e.exe
+ 111 PSTORES.exe
+  65 LegacyResource..exe
+ 116 EveryDiscord.ex.exe
+ 126 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x4a
+
+eax=0081ce40 ebx=0066b7c0 ecx=00000100 edx=00e0ba30 esi=0081ce40 edi=00000000
+eip=0066b1f4 esp=0022f1dc ebp=00907cb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        0066b1d0 55               push    ebp
+        0066b1d1 53               push    ebx
+        0066b1d2 85c0             test    eax,eax
+        0066b1d4 0f8412050000     je      0066b6ec
+        0066b1da 85d2             test    edx,edx
+        0066b1dc 0f840a050000     je      0066b6ec
+        0066b1e2 e800000000       call    0066b1e7
+        0066b1e7 5b               pop     ebx
+        0066b1e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:0066bd99=66000000
+        0066b1ee 8d2db47c9000     lea     ebp,[00907cb4]         ds:00907cb4=078bffff
+FAULT ->0066b1f4 0f10             ???
+        0066b1f6 000f             add     [edi],cl                     ds:00000000=??
+        0066b1f8 57               push    edi
+        0066b1f9 e48b             in      al,8b
+        0066b1fb 6d               insd
+        0066b1fc 048d             add     al,0x8d
+        0066b1fe 52               push    edx
+        0066b1ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        0066b205 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0066b20b 000f             add     [edi],cl                     ds:00000000=??
+        0066b20d 841e             test    [esi],bl                     ds:0081ce40=00
+        0066b20f 0300             add     eax,[eax]              ds:0081ce40=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+00907cb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e0 00 00 00 00 00 - 11 b7 66 00 75 8f 5c 00  ..........f.u.\.
+0022f1ec  40 ce 81 00 00 01 00 00 - 30 ba e0 00 04 00 00 00  @.......0.......
+0022f1fc  ff ff ff ff b0 51 5c 00 - b0 b9 e0 00 73 03 66 00  .....Q\.....s.f.
+0022f20c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 02 00 00 00  ....@... .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dc 00 10 b9 e0 00 - b0 02 66 00 c0 6b 51 00  .(........f..kQ.
+0022f24c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 00 00 00 00  ....@... .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e0 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  40 ce 81 00 00 00 00 00 - 00 00 00 00 00 00 00 00  @...............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e0 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e0 00 bc 68 54 00  ...x....P....hT.
+0022f2cc  10 b9 e0 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e0 00 bf 2f 51 00  ...x.."....../Q.
+0022f2ec  9c 00 00 00 00 65 7c 00 - 4c 00 00 00 94 f3 22 00  .....e|.L.....".
+0022f2fc  b0 b2 e0 00 50 b3 e0 00 - 30 00 00 00 be 88 63 00  ....P...0.....c.
+0022f30c  40 ce 81 00 00 00 00 00 - 01 00 00 00 00 00 00 00  @...............
+
+
+
+Application exception occurred:
+        App:  (pid=73)
+        When: 12/18/2025 @ 14:58:34.62
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  72 NDDEAGNT.exe
+  76 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  88 RPCSS.exe
+ 100 VMwareService.e.exe
+ 111 PSTORES.exe
+  65 LegacyResource..exe
+  73 EveryDiscord.ex.exe
+  70 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x7a
+
+eax=0081ce40 ebx=0066b7c0 ecx=00000100 edx=00e0ba30 esi=0081ce40 edi=00000000
+eip=0066b1f4 esp=0022f1dc ebp=00907cb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        0066b1d0 55               push    ebp
+        0066b1d1 53               push    ebx
+        0066b1d2 85c0             test    eax,eax
+        0066b1d4 0f8412050000     je      0066b6ec
+        0066b1da 85d2             test    edx,edx
+        0066b1dc 0f840a050000     je      0066b6ec
+        0066b1e2 e800000000       call    0066b1e7
+        0066b1e7 5b               pop     ebx
+        0066b1e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:0066bd99=66000000
+        0066b1ee 8d2db47c9000     lea     ebp,[00907cb4]         ds:00907cb4=078bffff
+FAULT ->0066b1f4 0f10             ???
+        0066b1f6 000f             add     [edi],cl                     ds:00000000=??
+        0066b1f8 57               push    edi
+        0066b1f9 e48b             in      al,8b
+        0066b1fb 6d               insd
+        0066b1fc 048d             add     al,0x8d
+        0066b1fe 52               push    edx
+        0066b1ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        0066b205 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0066b20b 000f             add     [edi],cl                     ds:00000000=??
+        0066b20d 841e             test    [esi],bl                     ds:0081ce40=00
+        0066b20f 0300             add     eax,[eax]              ds:0081ce40=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+00907cb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e0 00 00 00 00 00 - 11 b7 66 00 75 8f 5c 00  ..........f.u.\.
+0022f1ec  40 ce 81 00 00 01 00 00 - 30 ba e0 00 04 00 00 00  @.......0.......
+0022f1fc  ff ff ff ff b0 51 5c 00 - b0 b9 e0 00 73 03 66 00  .....Q\.....s.f.
+0022f20c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 02 00 00 00  ....@... .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dc 00 10 b9 e0 00 - b0 02 66 00 c0 6b 51 00  .(........f..kQ.
+0022f24c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 00 00 00 00  ....@... .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e0 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  40 ce 81 00 00 00 00 00 - 00 00 00 00 00 00 00 00  @...............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e0 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e0 00 bc 68 54 00  ...x....P....hT.
+0022f2cc  10 b9 e0 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e0 00 bf 2f 51 00  ...x.."....../Q.
+0022f2ec  9c 00 00 00 00 65 7c 00 - 4c 00 00 00 94 f3 22 00  .....e|.L.....".
+0022f2fc  b0 b2 e0 00 50 b3 e0 00 - 30 00 00 00 be 88 63 00  ....P...0.....c.
+0022f30c  40 ce 81 00 00 00 00 00 - 01 00 00 00 00 00 00 00  @...............
+
+
+
+Application exception occurred:
+        App:  (pid=70)
+        When: 12/18/2025 @ 14:59:31.62
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  72 NDDEAGNT.exe
+  76 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  88 RPCSS.exe
+ 100 VMwareService.e.exe
+ 111 PSTORES.exe
+  65 LegacyResource..exe
+  70 EveryDiscord.ex.exe
+  62 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x7b
+
+eax=0081ce40 ebx=0066b7c0 ecx=00000100 edx=00e0ba30 esi=0081ce40 edi=00000000
+eip=0066b1f4 esp=0022f1dc ebp=00907cb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        0066b1d0 55               push    ebp
+        0066b1d1 53               push    ebx
+        0066b1d2 85c0             test    eax,eax
+        0066b1d4 0f8412050000     je      0066b6ec
+        0066b1da 85d2             test    edx,edx
+        0066b1dc 0f840a050000     je      0066b6ec
+        0066b1e2 e800000000       call    0066b1e7
+        0066b1e7 5b               pop     ebx
+        0066b1e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:0066bd99=66000000
+        0066b1ee 8d2db47c9000     lea     ebp,[00907cb4]         ds:00907cb4=078bffff
+FAULT ->0066b1f4 0f10             ???
+        0066b1f6 000f             add     [edi],cl                     ds:00000000=??
+        0066b1f8 57               push    edi
+        0066b1f9 e48b             in      al,8b
+        0066b1fb 6d               insd
+        0066b1fc 048d             add     al,0x8d
+        0066b1fe 52               push    edx
+        0066b1ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        0066b205 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0066b20b 000f             add     [edi],cl                     ds:00000000=??
+        0066b20d 841e             test    [esi],bl                     ds:0081ce40=00
+        0066b20f 0300             add     eax,[eax]              ds:0081ce40=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+00907cb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e0 00 00 00 00 00 - 11 b7 66 00 75 8f 5c 00  ..........f.u.\.
+0022f1ec  40 ce 81 00 00 01 00 00 - 30 ba e0 00 04 00 00 00  @.......0.......
+0022f1fc  ff ff ff ff b0 51 5c 00 - b0 b9 e0 00 73 03 66 00  .....Q\.....s.f.
+0022f20c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 02 00 00 00  ....@... .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dc 00 10 b9 e0 00 - b0 02 66 00 c0 6b 51 00  .(........f..kQ.
+0022f24c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 00 00 00 00  ....@... .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e0 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  40 ce 81 00 00 00 00 00 - 00 00 00 00 00 00 00 00  @...............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e0 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e0 00 bc 68 54 00  ...x....P....hT.
+0022f2cc  10 b9 e0 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e0 00 bf 2f 51 00  ...x.."....../Q.
+0022f2ec  9c 00 00 00 00 65 7c 00 - 4c 00 00 00 94 f3 22 00  .....e|.L.....".
+0022f2fc  b0 b2 e0 00 50 b3 e0 00 - 30 00 00 00 be 88 63 00  ....P...0.....c.
+0022f30c  40 ce 81 00 00 00 00 00 - 01 00 00 00 00 00 00 00  @...............
+
+
+
+Application exception occurred:
+        App:  (pid=123)
+        When: 12/18/2025 @ 15:0:8.843
+        Exception number: c000001d (illegal instruction)
+
+*----> System Information <----*
+        Computer Name: SNOW32NT4
+        User Name: Administrator
+        Number of Processors: 1
+        Processor Type: x86 Family 15 Model 1 Stepping 2
+        Windows Version: 4.0
+        Current Build: 1381
+        Service Pack: 6
+        Current Type: Uniprocessor Free
+        Registered Organization: 
+        Registered Owner: Snow32
+
+*----> Task List <----*
+   0 Idle.exe
+   2 System.exe
+  20 SMSS.exe
+  30 CSRSS.exe
+  34 WINLOGON.exe
+  40 SERVICES.exe
+  43 LSASS.exe
+  72 NDDEAGNT.exe
+  76 EXPLORER.exe
+  81 VMwareTray.exe
+  87 SPOOLSS.exe
+  88 RPCSS.exe
+ 100 VMwareService.e.exe
+ 111 PSTORES.exe
+  65 LegacyResource..exe
+ 123 EveryDiscord.ex.exe
+  39 DRWTSN32.exe
+   0 _Total.exe
+
+(00400000 - 00400000) 
+(77f60000 - 77fbe000) dll\ntdll.dbg
+(77dc0000 - 77dff000) dll\advapi32.dbg
+(77f00000 - 77f5e000) dll\kernel32.dbg
+(77e70000 - 77ec5000) dll\user32.dbg
+(77ed0000 - 77efc000) dll\gdi32.dbg
+(77e10000 - 77e67000) dll\rpcrt4.dbg
+(77aa0000 - 77b15000) COMCTL32.dbg
+(5cf00000 - 5cf5e000) dll\crypt32.dbg
+(78000000 - 78044000) 
+(5e380000 - 5e3a5000) dll\msoss.dbg
+(776b0000 - 776c4000) dll\ws2_32.dbg
+(776a0000 - 776a7000) dll\ws2help.dbg
+(77660000 - 7766f000) dll\msafd.dbg
+(77690000 - 77699000) dll\wshtcpip.dbg
+(776d0000 - 776d8000) dll\wsock32.dbg
+
+State Dump for Thread Id 0x7e
+
+eax=0081ce40 ebx=0066b7c0 ecx=00000100 edx=00e0ba30 esi=0081ce40 edi=00000000
+eip=0066b1f4 esp=0022f1dc ebp=00907cb4 iopl=0         nv up ei pl nz na po nc
+cs=001b  ss=0023  ds=0023  es=0023  fs=0038  gs=0000             efl=00000206
+
+
+function: <nosymbols>
+        0066b1d0 55               push    ebp
+        0066b1d1 53               push    ebx
+        0066b1d2 85c0             test    eax,eax
+        0066b1d4 0f8412050000     je      0066b6ec
+        0066b1da 85d2             test    edx,edx
+        0066b1dc 0f840a050000     je      0066b6ec
+        0066b1e2 e800000000       call    0066b1e7
+        0066b1e7 5b               pop     ebx
+        0066b1e8 8d9bd9050000     lea     ebx,[ebx+0x5d9]        ds:0066bd99=66000000
+        0066b1ee 8d2db47c9000     lea     ebp,[00907cb4]         ds:00907cb4=078bffff
+FAULT ->0066b1f4 0f10             ???
+        0066b1f6 000f             add     [edi],cl                     ds:00000000=??
+        0066b1f8 57               push    edi
+        0066b1f9 e48b             in      al,8b
+        0066b1fb 6d               insd
+        0066b1fc 048d             add     al,0x8d
+        0066b1fe 52               push    edx
+        0066b1ff 1081e5000800     adc     [ecx+0x800e5],al             ds:000801e5=??
+        0066b205 1081f9000100     adc     [ecx+0x100f9],al             ds:000101f9=00
+        0066b20b 000f             add     [edi],cl                     ds:00000000=??
+        0066b20d 841e             test    [esi],bl                     ds:0081ce40=00
+        0066b20f 0300             add     eax,[eax]              ds:0081ce40=03020100
+
+*----> Stack Back Trace <----*
+
+FramePtr ReturnAd Param#1  Param#2  Param#3  Param#4  Function Name
+00907cb4 e6d82203 00000000 00000000 00000000 00000000 <nosymbols> 
+
+*----> Raw Stack Dump <----*
+0022f1dc  b0 b9 e0 00 00 00 00 00 - 11 b7 66 00 75 8f 5c 00  ..........f.u.\.
+0022f1ec  40 ce 81 00 00 01 00 00 - 30 ba e0 00 04 00 00 00  @.......0.......
+0022f1fc  ff ff ff ff b0 51 5c 00 - b0 b9 e0 00 73 03 66 00  .....Q\.....s.f.
+0022f20c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 02 00 00 00  ....@... .......
+0022f21c  10 f2 22 00 04 00 00 00 - 04 00 00 00 00 00 00 00  ..".............
+0022f22c  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+0022f23c  c0 28 dc 00 10 b9 e0 00 - b0 02 66 00 c0 6b 51 00  .(........f..kQ.
+0022f24c  b0 b9 e0 00 40 ce 81 00 - 20 00 00 00 00 00 00 00  ....@... .......
+0022f25c  00 00 00 00 00 00 00 00 - 0a 00 00 00 50 b3 e0 00  ............P...
+0022f26c  a0 00 00 00 af 12 00 78 - 18 a1 03 78 01 00 00 00  .......x...x....
+0022f27c  40 ce 81 00 00 00 00 00 - 00 00 00 00 00 00 00 00  @...............
+0022f28c  9c 00 00 00 94 f3 22 00 - 10 b9 e0 00 02 00 00 00  ......".........
+0022f29c  17 00 00 00 e0 ff 22 00 - bc e9 00 78 48 12 03 78  ......"....xH..x
+0022f2ac  ff ff ff ff 30 00 00 00 - d7 12 00 78 a0 00 00 00  ....0......x....
+0022f2bc  c0 12 00 78 9c 00 00 00 - 50 b3 e0 00 bc 68 54 00  ...x....P....hT.
+0022f2cc  10 b9 e0 00 00 00 00 00 - 9c 00 00 00 94 f3 22 00  ..............".
+0022f2dc  08 80 03 78 94 f3 22 00 - b0 b2 e0 00 bf 2f 51 00  ...x.."....../Q.
+0022f2ec  9c 00 00 00 00 65 7c 00 - 4c 00 00 00 94 f3 22 00  .....e|.L.....".
+0022f2fc  b0 b2 e0 00 50 b3 e0 00 - 30 00 00 00 be 88 63 00  ....P...0.....c.
+0022f30c  40 ce 81 00 00 00 00 00 - 01 00 00 00 00 00 00 00  @...............
+

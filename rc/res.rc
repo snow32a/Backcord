@@ -1,0 +1,4 @@
+#include "res.h"
+
+IDI_BACKCORDIC RCDATA "backcord_icon.png"
+IDI_BACKCORDBANNERIC BITMAP "backcordbanner.bmp"
