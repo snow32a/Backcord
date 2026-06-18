@@ -1,7 +1,14 @@
 # Backcord
 A Backwards-compatible Win32-C based Discord client, attempting to reach NT3.1+
 
+## Current reach of compatibility
+Windows NT4 RTM is the lowest it works on, we need Kernel32 patches for NT3.51 and NT3.1, I have failed to do that and I'm open to contributions for that
 
+## Current reach of features
+* Basic texting
+* Listing channels & guilds
+* Mention notifications
+  
 > [!CAUTION]
 >
 > <details>
