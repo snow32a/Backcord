@@ -1,7 +1,7 @@
 #include <windows.h>
 #include "../hmap/hashmap.h"
 
-#define GVN_ITEMCLICK   (0U - 1800U)
+#define GVN_ITEMCHANGED   (0U - 1800U)
 #define GUILDVIEW_MAGIC 0xACC0
 #define GUILDVIEW_DMS -1
 typedef struct {
@@ -26,6 +26,7 @@ typedef struct {
 	int contentHeight;
 	HDC dmsicon;
 	int selIndex;
+	int GuildSize;
 } GuildWnd;
 
 LRESULT CALLBACK GuildWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,

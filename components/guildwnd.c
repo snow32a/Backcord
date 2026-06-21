@@ -30,7 +30,8 @@ void GuildView_SetIcon(HWND hwnd, HDC icon, char *id) {
 	GuildWnd *guildwnd = GetGuildControlDetails(hwnd);
 	for (int i = 0; i < guildwnd->uigldcnt; i++) {
 		if (strcmp(guildwnd->uiglds[i].id, id) == 0) {
-			guildwnds->uiglds[i].icon = icon;
+			guildwnd->uiglds[i].icon = icon;
+			InvalidateRect(hwnd, NULL, TRUE);
 			break;
 		}
 	}
@@ -40,6 +41,7 @@ void GuildView_SetMentionCount(HWND hwnd, char *id, int cnt) {
 	for (int i = 0; i < guildwnd->uigldcnt; i++) {
 		if (strcmp(guildwnd->uiglds[i].id, id) == 0) {
 			guildwnds->uiglds[i].MentionCount = cnt;
+			InvalidateRect(hwnd, NULL, TRUE);
 			break;
 		}
 	}
@@ -47,7 +49,8 @@ void GuildView_SetMentionCount(HWND hwnd, char *id, int cnt) {
 }
 void GuildView_SetDMsIcon(HWND hwnd, HDC icon) {
 	GuildWnd *guildwnd = GetGuildControlDetails(hwnd);
-	guildwnds->dmsicon = icon;
+	guildwnd->dmsicon = icon;
+	InvalidateRect(hwnd, NULL, TRUE);
 }
 
 LRESULT CALLBACK GuildWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
@@ -60,6 +63,12 @@ LRESULT CALLBACK GuildWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		guildwnds[guildwndcount - 1].uiglds = NULL;
 		guildwnds[guildwndcount - 1].hWnd = hwnd;
 		guildwnds[guildwndcount - 1].scrollOffset = 0;
+		guildwnds[guildwndcount - 1].GuildSize = 48;
+		guildwnds[guildwndcount - 1].selIndex = -2;
+		SetWindowLongPtr(hwnd, GWL_STYLE,
+						 GetWindowLongPtr(hwnd, GWL_STYLE) | WS_VSCROLL);
+		SetWindowPos(hwnd, NULL, 0, 0, 0, 0,
+					 SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 		return 0;
 		break;
 	case WM_PAINT: {
@@ -69,132 +78,157 @@ LRESULT CALLBACK GuildWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(hwnd, &ps);
 		FillRect(hdc, &ctlrect, (HBRUSH)(COLOR_3DFACE + 1));
+		int starty;
+		int x =
+			(ctlrect.right - ctlrect.left) /
+				2 -
+			gwnd->GuildSize / 2;
 		SetStretchBltMode(hdc, HALFTONE);
-		RECT rc = ctlrect;
-		int ctlw = ctlrect.right - ctlrect.left;
-		int guildsize = ctlw - 16;
+		int dmregy = 8 + gwnd->GuildSize + 8 + 10;
+		int hry = 8 + gwnd->GuildSize + 8;
+		int dmregstarty = 8;
 
-		rc.left += 8;
-		rc.right = rc.left + guildsize;
-		rc.top += 8;
-		rc.bottom = rc.top + guildsize;
+		HBITMAP hdmsbmp = GetCurrentObject(gwnd->dmsicon, OBJ_BITMAP);
+		BITMAP dmsbmp;
+		GetObject(hdmsbmp, sizeof(BITMAP), &dmsbmp);
 
-		if (gwnd->dmsicon) {
+		StretchBlt(hdc, x, dmregstarty-gwnd->scrollOffset,
+				   gwnd->GuildSize, gwnd->GuildSize, gwnd->dmsicon, 0, 0, dmsbmp.bmWidth, dmsbmp.bmHeight,
+				   SRCCOPY);
+		COLORREF hrup = GetSysColor(COLOR_3DHILIGHT);
+		COLORREF hrdown = GetSysColor(COLOR_3DSHADOW);
+		HPEN penhrup = CreatePen(PS_SOLID, 1, hrup);
+		HPEN penhrdown = CreatePen(PS_SOLID, 1, hrdown);
+		HPEN oldPen = SelectPen(hdc, penhrdown);
 
-			BITMAP bmpInfo;
-			HBITMAP hSrcBmp =
-				(HBITMAP)GetCurrentObject(gwnd->dmsicon, OBJ_BITMAP);
-			GetObject(hSrcBmp, sizeof(BITMAP), &bmpInfo);
+        MoveToEx(hdc, x, hry, NULL);
+		LineTo(hdc, x + gwnd->GuildSize, hry);
 
-			StretchBlt(hdc, rc.left, rc.top, guildsize, guildsize,
-					   gwnd->dmsicon, 0, 0, bmpInfo.bmWidth, bmpInfo.bmHeight,
-					   SRCCOPY);
-		} else {
-			FillRect(hdc, &rc, (HBRUSH)(COLOR_3DSHADOW + 1));
-		}
-		HPEN hPenDark = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_BTNSHADOW));
-		HPEN hPenLight =
-			CreatePen(PS_SOLID, 1, GetSysColor(COLOR_BTNHIGHLIGHT));
-		HPEN hOldPen;
+		SelectPen(hdc, penhrup);
 
-		hOldPen = SelectObject(hdc, hPenDark);
-		MoveToEx(hdc, rc.left, rc.top + guildsize + 8, NULL);
-		LineTo(hdc, rc.right, rc.top + guildsize + 8);
+        MoveToEx(hdc, x, hry+1, NULL);
+		LineTo(hdc, x + gwnd->GuildSize, hry + 1);
+		SelectPen(hdc,oldPen);
 
-		SelectObject(hdc, hPenLight);
-		MoveToEx(hdc, rc.left, rc.top + guildsize + 1 + 8, NULL);
-		LineTo(hdc, rc.right, rc.top + guildsize + 1 + 8);
 
-		SelectObject(hdc, hOldPen);
-		DeleteObject(hPenDark);
-		DeleteObject(hPenLight);
-
+		int gldstarty=dmregy-gwnd->scrollOffset;
 		for (int i = 0; i < gwnd->uigldcnt; i++) {
-			RECT rc = ctlrect;
-			rc.left += 8;
-			rc.right = rc.left + guildsize;
-			rc.top += i * (guildsize + 8) + 8 + guildsize + 10 + 8;
-			rc.bottom = rc.top + guildsize;
-			if (i == gwnd->selIndex) {
-				RECT rcs = rc;
-				rcs.left = ctlrect.left;
-				rcs.right = ctlrect.right;
-				rcs.top -= 4;
-				rcs.bottom += 4;
-				FillRect(hdc, &rcs, (HBRUSH)(COLOR_HIGHLIGHT + 1));
+			GUIGuild gld = gwnd->uiglds[i];
+			if (gwnd->selIndex == i) {
+				RECT lprc;
+				lprc.left = 0;
+				lprc.right = ctlrect.right;
+				lprc.top = (gwnd->GuildSize + 8) * i + gldstarty-4;
+				lprc.bottom = lprc.top + gwnd->GuildSize+8;
+				FillRect(hdc, &lprc, (HBRUSH)(COLOR_HIGHLIGHT + 1));
 			}
-			if (gwnd->uiglds[i].icon) {
-
-				BITMAP bmpInfo;
-				HBITMAP hSrcBmp =
-					(HBITMAP)GetCurrentObject(gwnd->uiglds[i].icon, OBJ_BITMAP);
-				GetObject(hSrcBmp, sizeof(BITMAP), &bmpInfo);
-
-				StretchBlt(hdc, rc.left, rc.top, guildsize, guildsize,
-						   gwnd->uiglds[i].icon, 0, 0, bmpInfo.bmWidth,
-						   bmpInfo.bmHeight, SRCCOPY);
+			if (gld.icon) {
+				int srcw, srch;
+				HBITMAP hbmp = GetCurrentObject(gld.icon, OBJ_BITMAP);
+				BITMAP bmp;
+				GetObject(hbmp, sizeof(BITMAP), &bmp);
+				srcw = bmp.bmWidth;
+				srch = bmp.bmHeight;
+				StretchBlt(hdc, x, (gwnd->GuildSize+8) * i + gldstarty, gwnd->GuildSize,
+						   gwnd->GuildSize, gld.icon, 0, 0, srcw, srch,
+						   SRCCOPY);
 			} else {
-				FillRect(hdc, &rc, (HBRUSH)(COLOR_3DSHADOW + 1));
-			}
-			if (gwnd->uiglds[i].MentionCount) {
-				HBRUSH indicatorbrush = CreateSolidBrush((COLORREF)0x000000FF);
+				RECT lprc;
+				lprc.left = x;
+				lprc.right = x + gwnd->GuildSize;
+				lprc.top = (gwnd->GuildSize + 8) * i + gldstarty;
+				lprc.bottom = lprc.top + gwnd->GuildSize;
 
-				RECT rc = ctlrect;
-				rc.left += 8;
-				rc.right = rc.left + guildsize;
-				rc.top += i * (guildsize + 8) + 8 + guildsize + 10 + 8;
-				rc.bottom = rc.top + guildsize;
-
-				rc.top = i * (guildsize + 8) + 8 + guildsize + 10 + 8 + guildsize - 16;
-				rc.left = rc.left + guildsize - 16;
-				FillRect(hdc, &rc, indicatorbrush);
-				char unreadtxt[16];
-				wsprintf(unreadtxt,"%i",gwnd->uiglds[i].MentionCount);
-				DrawText(hdc,unreadtxt,strlen(unreadtxt),&rc,DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+				FillRect(hdc, &lprc, (HBRUSH)(COLOR_3DSHADOW + 1));
+				char *initials = malloc(2);
+				initials[0] = gld.title[0];
+				int sizeofinitials = 1;
+				for (char *c = gld.title + 1; *c; c++) {
+					if (*(c - 1) == ' ') {
+						sizeofinitials++;
+						initials=realloc(initials, sizeofinitials+1);
+						initials[sizeofinitials-1]=*c;
+					}
+				}
+				SetBkMode(hdc, TRANSPARENT);
+				SetTextColor(hdc, RGB(255, 255, 255));
+				SetBkColor(hdc,TRANSPARENT);
+				DrawTextA(hdc,initials,sizeofinitials,&lprc,DT_SINGLELINE | DT_VCENTER | DT_CENTER);
+				free(initials);
 			}
 		}
+
 		EndPaint(hwnd, &ps);
+
+
+		// Set scroll stuff
+
+		int contentHeight = gwnd->uigldcnt * (gwnd->GuildSize+8)+dmregy;
+
+		RECT rc;
+		GetClientRect(hwnd, &rc);
+
+		SCROLLINFO si = {sizeof(si), SIF_RANGE | SIF_PAGE | SIF_POS,
+						 0,			 contentHeight - 1,
+						 rc.bottom,	 gwnd->scrollOffset};
+
+		SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
+
+		return 0;
+		break;
+	}
+	case WM_VSCROLL:
+	{
+		GuildWnd *gwnd = GetGuildControlDetails(hwnd);
+		SCROLLINFO si = { sizeof(si), SIF_ALL };
+		GetScrollInfo(hwnd, SB_VERT, &si);
+	
+		switch (LOWORD(wParam))
+		{
+			case SB_LINEUP:      si.nPos -= 20; break;
+			case SB_LINEDOWN:    si.nPos += 20; break;
+			case SB_PAGEUP:      si.nPos -= si.nPage; break;
+			case SB_PAGEDOWN:    si.nPos += si.nPage; break;
+			case SB_THUMBTRACK:  si.nPos = si.nTrackPos; break;
+		}
+	
+		SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
+		GetScrollInfo(hwnd, SB_VERT, &si);
+	
+		gwnd->scrollOffset = si.nPos;
+		InvalidateRect(hwnd, NULL, FALSE);
 		return 0;
 	}
 	case WM_LBUTTONUP: {
 		GuildWnd *gwnd = GetGuildControlDetails(hwnd);
-		RECT ctlrect;
-		GetClientRect(hwnd, &ctlrect);
-		int ctlw = ctlrect.right - ctlrect.left;
-		int guildsize = ctlw - 16;
-		if (GET_Y_LPARAM(lParam) < guildsize + 10 + 8) {
-			if (gwnd->selIndex != 1) {
-				gwnd->selIndex = -1;
+		int x = GET_X_LPARAM(lParam);
+		int y = GET_Y_LPARAM(lParam)+gwnd->scrollOffset;
+	
+		NMGUILDVIEW nm = {0};
+	
+		nm.hdr.hwndFrom = hwnd;
+		nm.hdr.idFrom   = GetDlgCtrlID(hwnd);
+		nm.hdr.code     = GVN_ITEMCHANGED;
 
-				NMGUILDVIEW nm = {0};
-				nm.hdr.hwndFrom = hwnd;
-				nm.hdr.idFrom = GetDlgCtrlID(hwnd);
-				nm.hdr.code = GVN_ITEMCLICK;
-				nm.index = GUILDVIEW_DMS;
-				nm.guild = (GUIGuild){NULL};
-				nm.pt = (POINT){GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
-
-				SendMessage(GetParent(hwnd), WM_NOTIFY, (WPARAM)nm.hdr.idFrom,
-							(LPARAM)&nm);
-				InvalidateRect(hwnd, NULL, FALSE);
+		if (y < 8 + gwnd->GuildSize && gwnd->selIndex != GUILDVIEW_DMS) {
+			gwnd->selIndex = GUILDVIEW_DMS;
+			nm.index = GUILDVIEW_DMS;
+			nm.guild = (GUIGuild){0};
+		} else if (y > 8 + gwnd->GuildSize + 8 + 10) {
+			nm.index = (y - 16 - 10 - gwnd->GuildSize) / (gwnd->GuildSize + 8);
+			if (nm.index == gwnd->selIndex) {
+				return 0;
 			}
+			gwnd->selIndex=nm.index;
+			nm.guild = gwnd->uiglds[nm.index];
 		} else {
-			int index = (GET_Y_LPARAM(lParam) - 8 - guildsize - 10 - 8) /
-						(guildsize + 8);
-			if (index != gwnd->selIndex) {
-				NMGUILDVIEW nm = {0};
-				nm.hdr.hwndFrom = hwnd;
-				nm.hdr.idFrom = GetDlgCtrlID(hwnd);
-				nm.hdr.code = GVN_ITEMCLICK;
-				nm.index = index;
-				nm.guild = gwnd->uiglds[index];
-				nm.pt = (POINT){GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
-				gwnd->selIndex = index;
-				SendMessage(GetParent(hwnd), WM_NOTIFY, (WPARAM)nm.hdr.idFrom,
-							(LPARAM)&nm);
-				InvalidateRect(hwnd, NULL, FALSE);
-			}
+			return 0;
 		}
+		nm.pt.x = x;
+		nm.pt.y = y;
+
+		SendMessage(GetParent(hwnd), WM_NOTIFY, nm.hdr.idFrom, (LPARAM)&nm);
+		InvalidateRect(hwnd, NULL, true);
 		return 0;
 	}
 	}

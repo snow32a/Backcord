@@ -29,6 +29,10 @@ static HWND hDMsList;
 static HWND hGSel;
 static HWND hPfpArea;
 static HWND hMemList;
+
+static HWND hPfpAreaPfp;
+static HWND hPfpAreaDispName;
+static HWND hPfpAreaUserName;
 static HIMAGELIST hSidePfps;
 HINSTANCE hInstance;
 SSL *GatewaySSL;
@@ -127,6 +131,61 @@ void onDiscordGuildLoad(DiscordGuild *guild, char *id) {
 		free(path);
 	}
 }
+
+HBITMAP ResizeBitmap(HBITMAP hOrig, int w, int h) {
+	BITMAP bm;
+	GetObject(hOrig, sizeof(bm), &bm);
+
+	HDC hdcScreen = GetDC(NULL);
+	HDC hdcSrc = CreateCompatibleDC(hdcScreen);
+	HDC hdcDst = CreateCompatibleDC(hdcScreen);
+	HBITMAP hResized = CreateCompatibleBitmap(hdcScreen, w, h);
+
+	SelectObject(hdcSrc, hOrig);
+	SelectObject(hdcDst, hResized);
+
+	SetStretchBltMode(hdcDst, HALFTONE);
+	SetBrushOrgEx(hdcDst, 0, 0, NULL);
+
+	StretchBlt(hdcDst, 0, 0, w, h, hdcSrc, 0, 0, bm.bmWidth, bm.bmHeight,
+			   SRCCOPY);
+
+	DeleteDC(hdcSrc);
+	DeleteDC(hdcDst);
+	ReleaseDC(NULL, hdcScreen);
+	DeleteObject(hOrig);
+
+	return hResized;
+}
+void onDiscordReady(DiscordUser user, DiscordGuild *guilds, int guildscount) {
+	if (user.avatar) {
+		char tempPath[MAX_PATH];
+		DWORD len = GetTempPathA(MAX_PATH, tempPath);
+		char *path = malloc(MAX_PATH + strlen(user.id) + 1);
+		wsprintfA(path, "%s%s.png", tempPath, user.avatar);
+		if (GetFileAttributesA(path) == INVALID_FILE_ATTRIBUTES) {
+			path = DiscordFetchTmpPfp(user.id,
+									  user.avatar); // testing
+		}
+
+		RECT ClientRect;
+		GetClientRect(hPfpAreaPfp, &ClientRect);
+		int DestW = ClientRect.right - ClientRect.left;
+		int DestH = ClientRect.bottom - ClientRect.top;
+
+		SendMessage(hPfpAreaPfp, STM_SETIMAGE, IMAGE_BITMAP,
+					(LPARAM)ResizeBitmap(LoadPNGBitmap(path),DestW,DestH));
+
+		free(path);
+	}
+	if (user.DisplayName) {
+		SetWindowText(hPfpAreaDispName, user.DisplayName);
+		SetWindowText(hPfpAreaUserName, user.Username);
+	} else {
+		SetWindowText(hPfpAreaDispName, user.Username);
+		ShowWindow(hPfpAreaUserName, SW_HIDE);
+	}
+}
 void onDiscordUpdatedGuildReadState(DiscordGuild guild) {
 	GuildView_SetMentionCount(hGSel, guild.id, guild.MentionCount);
 }
@@ -162,7 +221,7 @@ LRESULT CALLBACK MsgBarSubclassProc(HWND hwnd, UINT msg, WPARAM wParam,
 			if (!(GetKeyState(VK_SHIFT) &
 				  0x8000)) // if no shift then do cool stuff
 			{
-				char *msgcontent = malloc(GetWindowTextLength(hMsg) + 1);
+				char msgcontent[GetWindowTextLength(hMsg) + 1];
 				GetWindowText(hMsg, msgcontent, GetWindowTextLength(hMsg) + 1);
 				DiscordSendMessage(curChannel, msgcontent);
 
@@ -173,35 +232,17 @@ LRESULT CALLBACK MsgBarSubclassProc(HWND hwnd, UINT msg, WPARAM wParam,
 	}
 	return CallWindowProc(msgoldwndproc, hwnd, msg, wParam, lParam);
 }
-HBITMAP ResizeBitmap(HBITMAP hOrig, int w, int h) {
-	BITMAP bm;
-	GetObject(hOrig, sizeof(bm), &bm);
-
-	HDC hdcScreen = GetDC(NULL);
-	HDC hdcSrc = CreateCompatibleDC(hdcScreen);
-	HDC hdcDst = CreateCompatibleDC(hdcScreen);
-	HBITMAP hResized = CreateCompatibleBitmap(hdcScreen, w, h);
-
-	SelectObject(hdcSrc, hOrig);
-	SelectObject(hdcDst, hResized);
-
-	SetStretchBltMode(hdcDst, HALFTONE);
-	SetBrushOrgEx(hdcDst, 0, 0, NULL);
-
-	StretchBlt(hdcDst, 0, 0, w, h, hdcSrc, 0, 0, bm.bmWidth, bm.bmHeight,
-			   SRCCOPY);
-
-	DeleteDC(hdcSrc);
-	DeleteDC(hdcDst);
-	ReleaseDC(NULL, hdcScreen);
-	DeleteObject(hOrig);
-
-	return hResized;
-}
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 							LPARAM lParam) {
 	switch (uMsg) {
 	case WM_CREATE:
+
+		NONCLIENTMETRICS ncm = {sizeof(NONCLIENTMETRICS)};
+		SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0);
+		HFONT SysFont = CreateFontIndirect(&ncm.lfMessageFont);
+		ncm.lfMessageFont.lfWeight = FW_BOLD;
+		HFONT BoldSysFont = CreateFontIndirect(&ncm.lfMessageFont);
+
 		InitHTTP();
 		OpenWebSocket("gateway.discord.gg", "/?encoding=json&v=9", &GatewaySSL);
 
@@ -213,7 +254,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 							   WS_CHILD | WS_VISIBLE | LVS_LIST, // Window style
 
 							   // Size and position
-							   0, 0, 75, rc.bottom - rc.top - 80,
+							   0, 0, 90, rc.bottom - rc.top - 80,
 
 							   hwnd,	   // Parent window
 							   (HMENU)102, // Menu
@@ -225,10 +266,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		hChTree = CreateWindowExA(WS_EX_CLIENTEDGE, WC_TREEVIEWA, NULL,
 								  WS_CHILD | WS_VISIBLE | TVS_HASLINES |
 									  TVS_LINESATROOT | TVS_HASBUTTONS,
-								  75, 0, 128, rc.bottom - rc.top - 80, hwnd,
+								  90, 0, 128, rc.bottom - rc.top - 80, hwnd,
 								  (HMENU)103, hInstance, NULL);
 		hDMsList = CreateWindowExA(
-			WS_EX_CLIENTEDGE, WC_LISTVIEWA, NULL, WS_CHILD | WS_VISIBLE, 75, 0,
+			WS_EX_CLIENTEDGE, WC_LISTVIEWA, NULL, WS_CHILD | WS_VISIBLE, 90, 0,
 			128, rc.bottom - rc.top - 80, hwnd, (HMENU)103, hInstance, NULL);
 		ShowWindow(hDMsList, SW_HIDE);
 		hMsgList = CreateWindowEx(0,			  // Optional window styles.
@@ -237,7 +278,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 								  WS_CHILD | WS_VISIBLE, // Window style
 
 								  // Size and position
-								  75 + 128, 0, rc.right - 128 - 75,
+								  75 + 128, 0, rc.right - 128 - 90,
 								  rc.bottom - rc.top - 25,
 
 								  hwnd,		  // Parent window
@@ -245,20 +286,31 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 								  hInstance,  // Instance handle
 								  NULL);	  // Additional application data
 
-		hPfpArea = CreateWindowEx(
-			0,				// Optional window styles.
-			"BUTTON",		// Window class
-			"User Profile", // Window text
-			ES_MULTILINE | WS_CHILD | WS_VISIBLE | BS_GROUPBOX, // Window style
+		hPfpArea =
+			CreateWindowEx(0,			   // Optional window styles.
+						   "BUTTON",	   // Window class
+						   "User Profile", // Window text
+						   WS_CHILD | WS_VISIBLE | BS_GROUPBOX, // Window style
 
-			// Size and position
-			0, rc.bottom - rc.top - 80, 128 + 75, 80,
+						   // Size and position
+						   0, rc.bottom - rc.top - 80, 128 + 89, 80,
 
-			hwnd,	   // Parent window
-			NULL,	   // Menu
-			hInstance, // Instance handle
-			NULL	   // Additional application data
-		);
+						   hwnd,	  // Parent window
+						   NULL,	  // Menu
+						   hInstance, // Instance handle
+						   NULL		  // Additional application data
+			);
+		hPfpAreaPfp = CreateWindowExA(
+			0, "STATIC", "", SS_BITMAP | WS_CHILD | WS_VISIBLE,
+			12, 24, 36, 36, hPfpArea, NULL, GetModuleHandle(NULL), NULL);
+		hPfpAreaDispName = CreateWindowExA(
+			0, "STATIC", "Display Name", WS_CHILD | WS_VISIBLE, 54, 24, 144, 16,
+			hPfpArea, NULL, GetModuleHandle(NULL), NULL);
+		SendMessage(hPfpAreaDispName, WM_SETFONT, (WPARAM)BoldSysFont, 0);
+		hPfpAreaUserName = CreateWindowExA(
+			0, "STATIC", "Username", WS_CHILD | WS_VISIBLE, 54, 38, 144, 16,
+			hPfpArea, NULL, GetModuleHandle(NULL), NULL);
+		SendMessage(hPfpAreaUserName, WM_SETFONT, (WPARAM)SysFont, 0);
 		SendMessage(hPfpArea, WM_SETFONT, (WPARAM)regfont, 0);
 		hMsg = CreateWindowEx(WS_EX_CLIENTEDGE, // Optional window styles.
 							  "EDIT",			// Window class
@@ -267,8 +319,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 								  WS_VISIBLE, // Window style
 
 							  // Size and position
-							  128 + 75, rc.bottom - rc.top - 25,
-							  rc.right - rc.left - 128 - 75 - 25, 25,
+							  128 + 89, rc.bottom - rc.top - 25,
+							  rc.right - rc.left - 128 - 89 - 25, 25,
 
 							  hwnd,		  // Parent window
 							  (HMENU)104, // Menu
@@ -300,11 +352,11 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		int height = HIWORD(lParam);
 		SetWindowPos(hPfpArea, NULL, 0, height - 80, 0, 0,
 					 SWP_NOSIZE | SWP_NOZORDER);
-		SetWindowPos(hGSel, NULL, 0, 0, 75, height - 80, SWP_NOZORDER);
-		SetWindowPos(hMsg, NULL, 128 + 75, height - 25, width - 128 - 75 - 25,
+		SetWindowPos(hGSel, NULL, 0, 0, 90, height - 80, SWP_NOZORDER);
+		SetWindowPos(hMsg, NULL, 128 + 90, height - 25, width - 128 - 90 - 25,
 					 25, SWP_NOZORDER);
-		SetWindowPos(hChTree, NULL, 75, 0, 128, height - 80, SWP_NOZORDER);
-		SetWindowPos(hMsgList, NULL, 128 + 75, 0, width - 128 - 75, height - 25,
+		SetWindowPos(hChTree, NULL, 90, 0, 128, height - 80, SWP_NOZORDER);
+		SetWindowPos(hMsgList, NULL, 128 + 90, 0, width - 128 - 90, height - 25,
 					 SWP_NOZORDER);
 		SetWindowPos(hSend, NULL, width - 25, height - 25, 25, 25,
 					 SWP_NOZORDER | SWP_NOSIZE);
@@ -340,13 +392,13 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 							char tempPath[MAX_PATH];
 							DWORD len = GetTempPathA(MAX_PATH, tempPath);
 							char path[MAX_PATH +
-									   strlen(dms[i].receipents[0].avatar) + 1];
+									  strlen(dms[i].receipents[0].avatar) + 1];
 							wsprintfA(path, "%s%s.png", tempPath,
 									  dms[i].receipents[0].avatar);
 
 							if (GetFileAttributesA(path) ==
 								INVALID_FILE_ATTRIBUTES) {
-								char* path2 = DiscordFetchTmpPfp(
+								char *path2 = DiscordFetchTmpPfp(
 									dms[i].receipents[0].id,
 									dms[i].receipents[0].avatar); // testing
 								ImageList_Add(
@@ -376,6 +428,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 						tvInsert.item.state = TVIS_EXPANDED;
 						tvInsert.item.stateMask = TVIS_EXPANDED;
 						tvInsert.item.iImage =
+							dms[i].receipents[0].avatar ? pfpidx : 0;
+						tvInsert.item.iSelectedImage =
 							dms[i].receipents[0].avatar ? pfpidx : 0;
 						HTREEITEM lres = (HTREEITEM)SendMessage(
 							hChTree, TVM_INSERTITEM, 0, (LPARAM)&tvInsert);
@@ -492,6 +546,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 
 		FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_BTNFACE + 1));
 		EndPaint(hwnd, &ps);
+
 		return 0;
 		break;
 	}

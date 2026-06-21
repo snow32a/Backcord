@@ -187,13 +187,6 @@ BOOL IsStartMsg(ChatWnd *cwnd, int i) {
 		return TRUE;
 	}
 }
-BOOL ShouldGoUp(ChatWnd *cwnd, int i) {
-	if (i > 0) {
-		return (IsStartMsg(cwnd, i - 1) && !IsStartMsg(cwnd, i));
-	} else {
-		return FALSE;
-	}
-}
 
 LRESULT CALLBACK ChatWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                              LPARAM lParam) {
@@ -225,12 +218,12 @@ LRESULT CALLBACK ChatWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		SetBrushOrgEx(hdc, 0, 0, NULL);
 
 		typedef struct {
-			int TextContentHeight;
-			int UnpaddedMessageHeight;
-			int ClampedUnpaddedMessageHeight;
-			int UnclampedTotalMessageHeight;
-			int TotalMessageHeight;
-			int MessageHeightForUse;
+			unsigned int TextContentHeight;
+			unsigned int UnpaddedMessageHeight;
+			unsigned int ClampedUnpaddedMessageHeight;
+			unsigned int UnclampedTotalMessageHeight;
+			unsigned int TotalMessageHeight;
+			unsigned int MessageHeightForUse;
 			BOOL StartMsg;
 			BOOL PushBack;
 		} MessageDetails;
@@ -258,7 +251,7 @@ LRESULT CALLBACK ChatWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 				}
 
 				if (msgdet[i].PushBack) {
-
+					// 15 is for the username field
 					msgdet[i].UnpaddedMessageHeight =
 					    15 + msgdet[i].TextContentHeight;
 

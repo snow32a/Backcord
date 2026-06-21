@@ -32,6 +32,7 @@ static int ChannelCompare(const void *a, const void *b, void *udata) {
 static void ChannelFree(void *item) {}
 extern void onDiscordGuildLoad(DiscordGuild *guild, char *id);
 extern void onDiscordUpdatedGuildReadState(DiscordGuild gld);
+extern void onDiscordReady(DiscordUser user, DiscordGuild *guilds, int guildscount);
 int DiscordSendMessage(const char *channelID, const char *content) {
 	cJSON *payload = cJSON_CreateObject();
 	cJSON *name = cJSON_CreateString(content);
@@ -313,7 +314,6 @@ void HandleREADY(cJSON *json) {
 
 		onDiscordGuildLoad(g, id);
 	}
-
 	cJSON *readstates = cJSON_GetObjectItem(data, "read_state");
 	for (int i = 0; i < cJSON_GetArraySize(readstates); i++) {
 		cJSON *readstate = cJSON_GetArrayItem(readstates, i);
@@ -343,6 +343,15 @@ void HandleREADY(cJSON *json) {
 				}
 			}
 	}
+	cJSON *jsonusr = cJSON_GetObjectItem(data, "user");
+	DiscordUser curuser = {0};
+	curuser.Username = cJSON_GetObjectItem(jsonusr, "username")->valuestring;
+	cJSON *jsondispname = cJSON_GetObjectItem(jsonusr, "global_name");
+	curuser.DisplayName = jsondispname ? jsondispname->valuestring : NULL;
+	cJSON *jsonavatar = cJSON_GetObjectItem(jsonusr, "avatar");
+	curuser.avatar = jsonavatar ? jsonavatar->valuestring : NULL;
+	curuser.id = cJSON_GetObjectItem(jsonusr, "id")->valuestring;
+	onDiscordReady(curuser,NULL,0);
 }
 extern void onDiscordReceiveMessage(DiscordMessage msg);
 void HandleMessageCreate(cJSON *json) {
