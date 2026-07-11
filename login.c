@@ -1,6 +1,3 @@
-#include <libloaderapi.h>
-#include <minwindef.h>
-#include <windef.h>
 #include <windows.h>
 #include <wingdi.h>
 int ret = 1;
@@ -64,7 +61,7 @@ char *PromptToken() {
 	wc.hCursor = LoadCursorA(NULL, IDC_ARROW);
 	wc.lpfnWndProc = loginwndproc;
 	RegisterClassA(&wc);
-	HWND hwnd = CreateWindowExA(0, clsname, "Backcord - Login", WS_OVERLAPPED,
+	HWND hwnd = CreateWindowExA(0, clsname, "Backcord - Login", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,
 								CW_USEDEFAULT, CW_USEDEFAULT, 320, 480, NULL,
 								NULL, GetModuleHandleA(NULL), NULL);
 	RECT clientrect;

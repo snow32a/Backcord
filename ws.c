@@ -201,7 +201,7 @@ int ReadWebSocket(SSL *ssl, char **out_buffer, size_t *out_length) {
 		unsigned char tlen = (plHeaders << 1) >> 1;
 		if (tlen == 127) {
 			SSL_read(ssl, &curPayloadLen, 8);
-			curPayloadLen = ntohll(curPayloadLen);
+			curPayloadLen = ntohl(curPayloadLen);
 			payloadLen += curPayloadLen;
 		} else if (tlen == 126) {
 			unsigned short templen;

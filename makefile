@@ -7,9 +7,9 @@ RES     = rc/res.o
 Backcord: $(RES)
 	$(WINDRES) rc/res.rc -o rc/res.o
 	$(CC) $(SRCS) $(RES) \
-		-Wl,-Bstatic -lpng -lz \
+		-D _WIN32_WINNT=0x401 -D WINVER=0x401 -Wl,-Bstatic -lpng -lz \
 		-Wl,-Bdynamic -lgdi32 -lssl -lcrypto -lcrypt32 -lws2_32 \
-		-luser32 -lcomctl32 -lcomdlg32 -lcjson -lntdll \
+		-luser32 -lcomctl32 -lmsvcrt -lcomdlg32 -lcjson -lntdll \
 		-o Backcord.exe
 
 clean:

@@ -1,5 +1,6 @@
 #include "chatwnd.h"
 #include <stdbool.h>
+#include <string.h>
 #include <windows.h>
 #include "snoctrl.h"
 #include "../discordtypes.h"
@@ -22,6 +23,7 @@ ChatWnd *GetChatControlDetails(HWND hwnd) {
 			return &chatwnds[i];
 		}
 	}
+	return NULL;
 }
 void ChatView_SetUserPfp(char *path, char *user) {
 	HANDLE f = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, NULL,

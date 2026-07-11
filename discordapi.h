@@ -7,6 +7,7 @@ int DiscordListGuildChannels(char* guildID, DiscordChannel** out);
 #define GUILD_VOICE 2
 #define GROUPCHAT 3
 #define GUILD_CATEGORY 4
+#define GUILD_ANNOUNCEMENT 5
 int DiscordGetChannelHistory(const char* channelID, unsigned int amount, DiscordMessage** msgs);
 char *DiscordFetchTmpPfp(char *userID, char *hash);
 char *DiscordFetchTmpGuildIcon(char *guildID, char *hash);

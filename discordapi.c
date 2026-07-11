@@ -335,8 +335,8 @@ void HandleREADY(cJSON *json) {
 					: 0) {
 				if (che->GuildID) {
 					DiscordGuild *gld = GetGuild(che->GuildID);
-					MessageBoxA(NULL, gld->name, "AAAAAAAAAA", 0);
 					if (gld) {
+					MessageBoxA(NULL, gld->name, "AAAAAAAAAA", 0);
 						gld->MentionCount += che->ReadState.MentionCount;
 						onDiscordUpdatedGuildReadState(*gld);
 					}

@@ -13,6 +13,7 @@ GuildWnd *GetGuildControlDetails(HWND hwnd) {
 			return &guildwnds[i];
 		}
 	}
+	return NULL;
 }
 void GuildView_InsertGuild(HWND hwnd, GUIGuild gld) {
 	GuildWnd *guildwnd = GetGuildControlDetails(hwnd);

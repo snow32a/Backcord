@@ -34,9 +34,11 @@ static HWND hPfpAreaPfp;
 static HWND hPfpAreaDispName;
 static HWND hPfpAreaUserName;
 static HIMAGELIST hSidePfps;
+static HIMAGELIST hChannelImgList;
 HINSTANCE hInstance;
 SSL *GatewaySSL;
 char *token;
+HWND hDMsProfileSide;
 int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, PSTR pCmdLine,
 				   int nCmdShow) {
 #ifdef test_token
@@ -69,6 +71,9 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, PSTR pCmdLine,
 	InitCommonControls();
 	InitSnowsControls();
 	hSidePfps = ImageList_Create(32, 32, ILC_COLOR32 | ILC_MASK, 12, 1);
+	hChannelImgList = ImageList_Create(16, 16, ILC_COLOR32 | ILC_MASK, 8, 1);
+	ImageList_AddMasked(hChannelImgList,LoadBitmap(hinstance,MAKEINTRESOURCE(IDI_CHANNEL_VC)),RGB(255,0,255));
+	ImageList_AddMasked(hChannelImgList,LoadBitmap(hinstance,MAKEINTRESOURCE(IDI_CHANNEL_ANC)),RGB(255,0,255));
 	hInstance = hinstance;
 	// register the window claws
 	const char CLASS_NAME[] = "BackcordMain";
@@ -124,7 +129,7 @@ void onDiscordGuildLoad(DiscordGuild *guild, char *id) {
 		char *path = malloc(MAX_PATH + strlen(guild->id) + 1);
 		wsprintfA(path, "%s%s.png", tempPath, guild->IconHash);
 		if (GetFileAttributesA(path) == INVALID_FILE_ATTRIBUTES) {
-			char *path = DiscordFetchTmpGuildIcon(guild->id,
+			path = DiscordFetchTmpGuildIcon(guild->id,
 												  guild->IconHash); // testing
 		}
 		GuildView_SetIcon(hGSel, LoadPNGImage(path), id);
@@ -244,7 +249,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		HFONT BoldSysFont = CreateFontIndirect(&ncm.lfMessageFont);
 
 		InitHTTP();
-		OpenWebSocket("gateway.discord.gg", "/?encoding=json&v=9", &GatewaySSL);
 
 		RECT rc;
 		GetClientRect(hwnd, &rc);
@@ -345,6 +349,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 			NULL		  // Additional application data
 		);
 		SendMessage(hSend, WM_SETFONT, (WPARAM)regfont, 0);
+		OpenWebSocket("gateway.discord.gg", "/?encoding=json&v=9", &GatewaySSL);
 		return 0;
 		break;
 	case WM_SIZE: {
@@ -417,8 +422,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 
 						tvInsert.hParent = hParent; // Parent is the root item
 						tvInsert.hInsertAfter = TVI_LAST;
-						tvInsert.item.mask = TVIF_TEXT | TVIF_PARAM |
-											 TVIS_EXPANDED | TVIF_STATE |
+						tvInsert.item.mask = TVIF_TEXT | TVIF_PARAM | TVIF_STATE |
 											 TVIF_IMAGE;
 						tvInsert.item.pszText =
 							dms[i].receipents[0].DisplayName
@@ -447,7 +451,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 				int ChannelCount =
 					DiscordListGuildChannels(guild->id, &Channels);
 				TreeView_DeleteAllItems(hChTree);
-				TreeView_SetImageList(hChTree, NULL, TVSIL_NORMAL);
+				//TreeView_SetImageList(hChTree, hChannelImgList, TVSIL_NORMAL);
 				struct hashmap *ChannelUITable =
 					hashmap_new(sizeof(ChannelUIEntry), 0, 0, 0, channel_hash,
 								channel_compare, NULL, NULL);
@@ -476,11 +480,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 					tvInsert.hParent = hParent; // Parent is the root item
 					tvInsert.hInsertAfter = TVI_LAST;
 					tvInsert.item.mask =
-						TVIF_TEXT | TVIF_PARAM | TVIS_EXPANDED | TVIF_STATE;
+						TVIF_TEXT | TVIF_PARAM | TVIF_STATE;
 					tvInsert.item.pszText = (VisualName);
 					tvInsert.item.lParam = (LPARAM) & (Channels[i]);
 					tvInsert.item.state = TVIS_EXPANDED;
 					tvInsert.item.stateMask = TVIS_EXPANDED;
+					
 					HTREEITEM lres = (HTREEITEM)SendMessage(
 						hChTree, TVM_INSERTITEM, 0, (LPARAM)&tvInsert);
 					if (Channels[i].type == GUILD_CATEGORY) {
@@ -494,6 +499,35 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 			}
 		} else if (pNMHDR.hwndFrom == hChTree) {
 			LPNMTREEVIEW pnmv = (LPNMTREEVIEW)lParam;
+				if (pNMHDR.code == NM_CUSTOMDRAW) {
+					LPNMTVCUSTOMDRAW pcd = (LPNMTVCUSTOMDRAW)lParam;
+					switch (pcd->nmcd.dwDrawStage) {
+					case CDDS_PREPAINT:
+						SetWindowLongPtr(hwnd, DWLP_MSGRESULT, CDRF_NOTIFYITEMDRAW);
+						return CDRF_NOTIFYITEMDRAW;
+					case CDDS_ITEMPREPAINT:
+						return CDRF_NOTIFYPOSTPAINT;
+					case CDDS_ITEMPOSTPAINT: {
+						DiscordChannel *chnl = (DiscordChannel *)pcd->nmcd.lItemlParam;
+						if (chnl && chnl->type == GUILD_VOICE) {
+							RECT rc;
+							TreeView_GetItemRect(hChTree, (HTREEITEM)pcd->nmcd.dwItemSpec, &rc, TRUE);
+							// draw icon to the left of the label rect
+							ImageList_Draw(hChannelImgList, 0, pcd->nmcd.hdc,
+										   rc.left - 18, rc.top + (rc.bottom - rc.top - 16) / 2,
+										   ILD_TRANSPARENT);
+						} else if (chnl && chnl->type == GUILD_ANNOUNCEMENT) {
+							RECT rc;
+							TreeView_GetItemRect(hChTree, (HTREEITEM)pcd->nmcd.dwItemSpec, &rc, TRUE);
+							// draw icon to the left of the label rect
+							ImageList_Draw(hChannelImgList, 1, pcd->nmcd.hdc,
+										   rc.left - 18, rc.top + (rc.bottom - rc.top - 16) / 2,
+										   ILD_TRANSPARENT);
+						}
+						return CDRF_DODEFAULT;
+					}
+					}
+				}
 			if (pNMHDR.code == TVN_SELCHANGED &&
 				pnmv->itemNew.state & TVIS_SELECTED) {
 				DiscordChannel *chnl = ((DiscordChannel *)pnmv->itemNew.lParam);
