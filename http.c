@@ -24,6 +24,29 @@ static void AppendHeader(char* buf,
     strcat(buf, value);
     strcat(buf, "\r\n");
 }
+
+char* ProcessChunkedTransfer(char* chunked, size_t chunked_len, size_t *out_len) {
+    char* result = malloc(chunked_len);
+    size_t written = 0;
+    char* curpos = chunked;
+
+    while(1) {
+        char* crlf = strstr(curpos, "\r\n");
+        if(!crlf) break;
+
+        int chunklen = (int)strtol(curpos, NULL, 16);
+        if(chunklen == 0) break;
+
+        char* data = crlf + 2;
+        memcpy(result + written, data, chunklen);
+        written += chunklen;
+        curpos = data + chunklen + 2;
+    }
+
+    *out_len = written;
+    return result;
+}
+
 HTTPConnection* ConnectOverHTTP(const char* hostname) {
     HTTPConnection* conn = malloc(sizeof(HTTPConnection));
     RtlZeroMemory(conn, sizeof(HTTPConnection));
@@ -203,27 +226,6 @@ int CloseHTTPConnection(HTTPConnection* conn) {
 
     free(conn);
     return 0;
-}
-char* ProcessChunkedTransfer(char* chunked, size_t chunked_len, size_t *out_len) {
-    char* result = malloc(chunked_len);
-    size_t written = 0;
-    char* curpos = chunked;
-
-    while(1) {
-        char* crlf = strstr(curpos, "\r\n");
-        if(!crlf) break;
-
-        int chunklen = (int)strtol(curpos, NULL, 16);
-        if(chunklen == 0) break;
-
-        char* data = crlf + 2;
-        memcpy(result + written, data, chunklen);
-        written += chunklen;
-        curpos = data + chunklen + 2;
-    }
-
-    *out_len = written;
-    return result;
 }
 int SendShortHTTPReq(const char* hostname,const char* reqtype, const char* endpoint, const char* extra_headers, const char* user_agent, const char* content_type, void* payload, unsigned long payload_size, char** response, long* responselen)
 {
