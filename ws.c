@@ -22,7 +22,7 @@ int OpenWebSocket(const char *hostname, const char *path, SSL **out_ssl) {
 	server.sin_addr = **(struct in_addr **)gethostbyname(hostname)->h_addr_list;
 
 	if (connect(sock, (struct sockaddr *)&server, sizeof(server)) ==
-	    SOCKET_ERROR) {
+		SOCKET_ERROR) {
 		MessageBoxA(NULL, "connect failed", "WebSocket Error", 0);
 		closesocket(sock);
 		return 1;
@@ -64,14 +64,14 @@ int OpenWebSocket(const char *hostname, const char *path, SSL **out_ssl) {
 	// send WebSocket upgrade request
 	char request[2048];
 	wsprintfA(request,
-	          "GET %s HTTP/1.1\r\n"
-	          "Host: %s\r\n"
-	          "Upgrade: websocket\r\n"
-	          "Connection: Upgrade\r\n"
-	          "Sec-WebSocket-Key: %s\r\n"
-	          "Sec-WebSocket-Version: 13\r\n"
-	          "\r\n",
-	          path, hostname, ws_key);
+			  "GET %s HTTP/1.1\r\n"
+			  "Host: %s\r\n"
+			  "Upgrade: websocket\r\n"
+			  "Connection: Upgrade\r\n"
+			  "Sec-WebSocket-Key: %s\r\n"
+			  "Sec-WebSocket-Version: 13\r\n"
+			  "\r\n",
+			  path, hostname, ws_key);
 
 	SSL_write(ssl, request, (int)strlen(request));
 
@@ -106,7 +106,7 @@ DWORD WINAPI WSThreadProc(LPVOID ssl) {
 
 		if (length != 0 && result != 0) {
 			WebSocketOnDataArrival(ssl, buffer, length);
-			// printf("%s\n",buffer);
+			printf("%s\n", buffer);
 			// LE IMPORTANT: free the buffer after processing... memleak goez
 			// brr otherewise
 			free(buffer);
@@ -117,7 +117,8 @@ DWORD WINAPI WSThreadProc(LPVOID ssl) {
 	return 0;
 };
 int SendWebSocket(SSL *ssl, const char *data, size_t length,
-                  unsigned char flags) {
+				  unsigned char flags) {
+	printf("%s\n", data);
 	unsigned char frame[14];
 	size_t frame_size = 0;
 
@@ -153,7 +154,8 @@ int SendWebSocket(SSL *ssl, const char *data, size_t length,
 		mask[i] = (unsigned char)(i & 0xFF);
 	}
 
-	RtlCopyMemory(&frame[frame_size], mask, 4); // me when i rtlcopymemory to look cool
+	RtlCopyMemory(&frame[frame_size], mask,
+				  4); // me when i rtlcopymemory to look cool
 	frame_size += 4;
 
 	// Send frame header
@@ -200,8 +202,15 @@ int ReadWebSocket(SSL *ssl, char **out_buffer, size_t *out_length) {
 		SSL_read(ssl, &plHeaders, 1);
 		unsigned char tlen = (plHeaders << 1) >> 1;
 		if (tlen == 127) {
-			SSL_read(ssl, &curPayloadLen, 8);
-			curPayloadLen = ntohl(curPayloadLen);
+			unsigned char lenbytes[8];
+			SSL_read(ssl, lenbytes,8);
+			curPayloadLen = 0;
+			for (int i = 0; i < 4; i++) {
+				unsigned char temp = lenbytes[i];
+				lenbytes[i]=lenbytes[7-i];
+				lenbytes[7-i]=temp;
+			}
+			curPayloadLen = *(unsigned long long*)lenbytes;
 			payloadLen += curPayloadLen;
 		} else if (tlen == 126) {
 			unsigned short templen;
@@ -222,8 +231,8 @@ int ReadWebSocket(SSL *ssl, char **out_buffer, size_t *out_length) {
 		unsigned long long totalRead = 0;
 		while (totalRead < curPayloadLen) {
 			int bytesRead = SSL_read(
-			    ssl, *out_buffer + (payloadLen - curPayloadLen) + totalRead,
-			    curPayloadLen - totalRead);
+				ssl, *out_buffer + (payloadLen - curPayloadLen) + totalRead,
+				curPayloadLen - totalRead);
 			if (bytesRead <= 0) {
 				free(*out_buffer);
 				return 0;
