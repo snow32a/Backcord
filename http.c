@@ -7,6 +7,15 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 
+// keepalive state
+typedef struct {
+    SOCKET sock;
+    SSL* ssl;
+    SSL_CTX* ctx;
+    char hostname[256];
+    int connected;
+} HTTPConnection;
+
 static void AppendHeader(char* buf,
     const char* key, const char* value)
 {
@@ -14,6 +23,186 @@ static void AppendHeader(char* buf,
     strcat(buf, ": ");
     strcat(buf, value);
     strcat(buf, "\r\n");
+}
+HTTPConnection* ConnectOverHTTP(const char* hostname) {
+    HTTPConnection* conn = malloc(sizeof(HTTPConnection));
+    RtlZeroMemory(conn, sizeof(HTTPConnection));
+
+    strncpy(conn->hostname, hostname, 255);
+    conn->hostname[255] = '\0';
+
+    conn->sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+    if (conn->sock == INVALID_SOCKET) {
+        MessageBoxA(NULL, "socket failed :(", "sad http announcement", 0);
+        free(conn);
+        return NULL;
+    }
+
+    struct sockaddr_in server;
+    RtlZeroMemory(&server, sizeof(server));
+    server.sin_family = AF_INET;
+    server.sin_port = htons(443);
+    server.sin_addr = **(struct in_addr**)gethostbyname(hostname)->h_addr_list; // why is a part of this in bold
+
+    if (connect(conn->sock, (struct sockaddr*)&server, sizeof(server)) == SOCKET_ERROR) {
+        MessageBoxA(NULL, "connect failed :(", "sad http announcement", 0);
+        closesocket(conn->sock);
+        free(conn);
+        return NULL;
+    }
+
+    conn->ctx = SSL_CTX_new(TLS_client_method());
+
+    if (!conn->ctx) {
+        MessageBoxA(NULL, "SSL_CTX_new failed :(", "sad http announcement", 0);
+        closesocket(conn->sock);
+        free(conn);
+        return NULL;
+    }
+
+    conn->ssl = SSL_new(conn->ctx);
+
+    if (!conn->ssl) {
+        MessageBoxA(NULL, "SSL_new failed :(", "sad http announcement", 0);
+        SSL_CTX_free(conn->ctx);
+        closesocket(conn->sock);
+        free(conn);
+        return NULL;
+    }
+
+    SSL_set_fd(conn->ssl, (int)conn->sock);
+    SSL_set_tlsext_host_name(conn->ssl, hostname);
+
+    if (SSL_connect(conn->ssl) <= 0) {
+        MessageBoxA(NULL, "SSL_connect failed :(", "sad http announcement", 0);
+        SSL_free(conn->ssl);
+        SSL_CTX_free(conn->ctx);
+        closesocket(conn->sock);
+        free(conn);
+        return NULL;
+    }
+
+    conn->connected = 1;
+    return conn;
+}
+int SendHTTPRequest(HTTPConnection* conn, const char* method, const char* endpoint,
+    const char* user_agent, const char* content_type, void* payload,
+    unsigned long payload_size, char** response, long* responselen)
+{
+    if (!conn || !conn->connected) {
+        MessageBoxA(NULL, "connection not established :(", "sad http announcement", 0);
+        return 1;
+    }
+
+    char headerbuf[2048];
+    RtlZeroMemory(headerbuf, sizeof(headerbuf));
+
+    wsprintfA(headerbuf, "%s %s HTTP/1.1\r\n", method, endpoint);
+    strcat(headerbuf, "Host: ");
+    strcat(headerbuf, conn->hostname);
+    strcat(headerbuf, "\r\n");
+    strcat(headerbuf, "User-Agent: ");
+    strcat(headerbuf, user_agent);
+    strcat(headerbuf, "\r\n");
+
+    if (payload) {
+        strcat(headerbuf, "Content-Type: ");
+        strcat(headerbuf, content_type);
+        strcat(headerbuf, "\r\n");
+
+        char contentlen[128];
+        RtlZeroMemory(contentlen, sizeof(contentlen));
+        wsprintfA(contentlen, "Content-Length: %lu\r\n", payload_size);
+        strcat(headerbuf, contentlen);
+    }
+
+    strcat(headerbuf, "Connection: keep-alive\r\n");
+    strcat(headerbuf, "\r\n");
+
+    if (SSL_write(conn->ssl, headerbuf, (int)strlen(headerbuf)) <= 0) {
+        MessageBoxA(NULL, "SSL_write headers failed :(", "sad http announcement", 0);
+        return 1;
+    }
+
+    if (payload && payload_size > 0) {
+        if (SSL_write(conn->ssl, payload, (int)payload_size) <= 0) {
+            MessageBoxA(NULL, "SSL_write payload failed :(", "sad http announcement", 0);
+            return 1;
+        }
+    }
+
+    char* buffer = malloc(8192);
+    size_t sizeofbuf = 8192;
+    size_t total_bytes = 0;
+    int bytes_read;
+
+    while ((bytes_read = SSL_read(conn->ssl, buffer + total_bytes, (int)(sizeofbuf - total_bytes - 1))) > 0) {
+        total_bytes += bytes_read;
+
+        if (total_bytes + 1 >= sizeofbuf) {
+            sizeofbuf += 8192;
+            char* newbuf = realloc(buffer, sizeofbuf);
+
+            if (!newbuf) {
+                MessageBoxA(NULL, "realloc failed :(", "sad http announcement", 0);
+                free(buffer);
+                return -1;
+            }
+
+            buffer = newbuf;
+        }
+    }
+
+    buffer[total_bytes] = '\0';
+
+    char* endofhdr = strstr(buffer, "\r\n\r\n");
+
+    if (!endofhdr) {
+        MessageBoxA(NULL, "malformed response :(", "sad http announcement", 0);
+        free(buffer);
+        return -1;
+    }
+
+    char* body_start = endofhdr + 4;
+    size_t body_len = total_bytes - (body_start - buffer);
+
+    if (strstr(buffer, "Transfer-Encoding: chunked")) {
+        size_t outlen;
+        *response = ProcessChunkedTransfer(body_start, body_len, &outlen);
+        *responselen = (long)outlen;
+        free(buffer);
+    } else {
+        char* copy = malloc(body_len + 1);
+        memcpy(copy, body_start, body_len);
+        copy[body_len] = '\0';
+        *response = copy;
+        *responselen = (long)body_len;
+        free(buffer);
+    }
+
+    return 0;
+}
+int CloseHTTPConnection(HTTPConnection* conn) {
+    if (!conn) {
+        return 1;
+    }
+
+    if (conn->ssl) {
+        SSL_shutdown(conn->ssl);
+        SSL_free(conn->ssl);
+    }
+
+    if (conn->ctx) {
+        SSL_CTX_free(conn->ctx);
+    }
+
+    if (conn->sock != INVALID_SOCKET) {
+        closesocket(conn->sock);
+    }
+
+    free(conn);
+    return 0;
 }
 char* ProcessChunkedTransfer(char* chunked, size_t chunked_len, size_t *out_len) {
     char* result = malloc(chunked_len);
