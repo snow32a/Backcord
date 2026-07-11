@@ -24,7 +24,7 @@ static void AppendHeader(char* buf,
     strcat(buf, value);
     strcat(buf, "\r\n");
 }
-HTTPConnection* HTTPConnect(const char* hostname) {
+HTTPConnection* ConnectOverHTTP(const char* hostname) {
     HTTPConnection* conn = malloc(sizeof(HTTPConnection));
     RtlZeroMemory(conn, sizeof(HTTPConnection));
 
@@ -86,7 +86,7 @@ HTTPConnection* HTTPConnect(const char* hostname) {
     conn->connected = 1;
     return conn;
 }
-int HTTPSendRequest(HTTPConnection* conn, const char* method, const char* endpoint,
+int SendHTTPRequest(HTTPConnection* conn, const char* method, const char* endpoint,
     const char* user_agent, const char* content_type, void* payload,
     unsigned long payload_size, char** response, long* responselen)
 {
@@ -183,7 +183,7 @@ int HTTPSendRequest(HTTPConnection* conn, const char* method, const char* endpoi
 
     return 0;
 }
-int HTTPClose(HTTPConnection* conn) {
+int CloseHTTPConnection(HTTPConnection* conn) {
     if (!conn) {
         return 1;
     }
