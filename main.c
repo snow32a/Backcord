@@ -443,7 +443,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 					}
 				}
 			} else {
-
 				DiscordGuild *guild;
 				guild = pnmv->guild.data;
 
@@ -457,14 +456,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 								channel_compare, NULL, NULL);
 				for (int i = 0; i < ChannelCount; i++) {
 					char *VisualName;
-					if (Channels[i].type == GUILD_TEXT) {
-						VisualName = malloc(strlen(Channels[i].name) + 2);
-						*VisualName = '#';
-						strcpy(VisualName + 1, Channels[i].name);
-					} else {
-						VisualName = malloc(strlen(Channels[i].name) + 1);
+						VisualName = malloc(strlen(Channels[i].name+1));
 						strcpy(VisualName, Channels[i].name);
-					}
 					TVINSERTSTRUCT tvInsert = {0};
 					HTREEITEM hParent = TVI_ROOT;
 					if (Channels[i].parentID) {
@@ -494,46 +487,16 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 						chnl->id = strdup(Channels[i].id);
 						hashmap_set(ChannelUITable, chnl);
 					}
-					free(VisualName);
 				}
 			}
 		} else if (pNMHDR.hwndFrom == hChTree) {
 			LPNMTREEVIEW pnmv = (LPNMTREEVIEW)lParam;
-				if (pNMHDR.code == NM_CUSTOMDRAW) {
-					LPNMTVCUSTOMDRAW pcd = (LPNMTVCUSTOMDRAW)lParam;
-					switch (pcd->nmcd.dwDrawStage) {
-					case CDDS_PREPAINT:
-						SetWindowLongPtr(hwnd, DWLP_MSGRESULT, CDRF_NOTIFYITEMDRAW);
-						return CDRF_NOTIFYITEMDRAW;
-					case CDDS_ITEMPREPAINT:
-						return CDRF_NOTIFYPOSTPAINT;
-					case CDDS_ITEMPOSTPAINT: {
-						DiscordChannel *chnl = (DiscordChannel *)pcd->nmcd.lItemlParam;
-						if (chnl && chnl->type == GUILD_VOICE) {
-							RECT rc;
-							TreeView_GetItemRect(hChTree, (HTREEITEM)pcd->nmcd.dwItemSpec, &rc, TRUE);
-							// draw icon to the left of the label rect
-							ImageList_Draw(hChannelImgList, 0, pcd->nmcd.hdc,
-										   rc.left - 18, rc.top + (rc.bottom - rc.top - 16) / 2,
-										   ILD_TRANSPARENT);
-						} else if (chnl && chnl->type == GUILD_ANNOUNCEMENT) {
-							RECT rc;
-							TreeView_GetItemRect(hChTree, (HTREEITEM)pcd->nmcd.dwItemSpec, &rc, TRUE);
-							// draw icon to the left of the label rect
-							ImageList_Draw(hChannelImgList, 1, pcd->nmcd.hdc,
-										   rc.left - 18, rc.top + (rc.bottom - rc.top - 16) / 2,
-										   ILD_TRANSPARENT);
-						}
-						return CDRF_DODEFAULT;
-					}
-					}
-				}
 			if (pNMHDR.code == TVN_SELCHANGED &&
 				pnmv->itemNew.state & TVIS_SELECTED) {
 				DiscordChannel *chnl = ((DiscordChannel *)pnmv->itemNew.lParam);
 				if (chnl->type != GUILD_CATEGORY) {
-					char *title = malloc(14 + strlen(pnmv->itemNew.pszText));
-					wsprintf(title, "Backcord - %s", pnmv->itemNew.pszText);
+					char *title = malloc(13 + strlen(chnl->name));
+					wsprintf(title, "Backcord - #%s", chnl->name);
 					SetWindowTextA(hwnd, title);
 					DiscordMessage *msgs;
 					int msgcnt = DiscordGetChannelHistory(chnl->id, 50, &msgs);

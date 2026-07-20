@@ -50,6 +50,11 @@ void ChatView_SetUserPfp(char *path, char *user) {
 	PngBuffer pngbuf = {buf, file_size, 0};
 
 	png_set_read_fn(png, &pngbuf, PngReadBufCB);
+	if (setjmp(png_jmpbuf(png))) {
+		png_destroy_read_struct(&png, &info, NULL);
+		// err
+		MessageBoxA(NULL, "zzzzzzzz", "zzzzzzzzz", 0);
+	}
 	png_read_info(png, info);
 
 	BITMAPINFO bmi = {0};
@@ -59,11 +64,6 @@ void ChatView_SetUserPfp(char *path, char *user) {
 	bmi.bmiHeader.biPlanes = 1;
 	bmi.bmiHeader.biBitCount = 32;
 	bmi.bmiHeader.biCompression = BI_RGB; // THIS IS RAW - gordon ramsey
-	if (setjmp(png_jmpbuf(png))) {
-		png_destroy_read_struct(&png, &info, NULL);
-		// err
-		MessageBoxA(NULL, "zzzzzzzz", "zzzzzzzzz", 0);
-	}
 	png_set_expand(png);
 	png_set_strip_16(png);
 	png_set_filler(png, 0xFF,
@@ -156,7 +156,7 @@ static int pfp_compare(const void *a, const void *b, void *udata) {
 }
 static void pfp_free(void *pfpitem) {
 	IntPfpTableItem *item = pfpitem;
-	free(item->bmp);
+	DeleteDC(item->bmp);
 	free(item->key);
 }
 #define UsernameFieldHeight 15

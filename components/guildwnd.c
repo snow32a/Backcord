@@ -228,8 +228,8 @@ LRESULT CALLBACK GuildWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		nm.pt.x = x;
 		nm.pt.y = y;
 
-		SendMessage(GetParent(hwnd), WM_NOTIFY, nm.hdr.idFrom, (LPARAM)&nm);
 		InvalidateRect(hwnd, NULL, true);
+		SendMessage(GetParent(hwnd), WM_NOTIFY, nm.hdr.idFrom, (LPARAM)&nm);
 		return 0;
 	}
 	}
