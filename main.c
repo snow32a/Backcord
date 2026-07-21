@@ -72,6 +72,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, PSTR pCmdLine,
 	InitSnowsControls();
 	hSidePfps = ImageList_Create(32, 32, ILC_COLOR32 | ILC_MASK, 12, 1);
 	hChannelImgList = ImageList_Create(16, 16, ILC_COLOR32 | ILC_MASK, 8, 1);
+	ImageList_AddMasked(hChannelImgList,LoadBitmap(hinstance,MAKEINTRESOURCE(IDI_CHANNEL_TC)),RGB(255,0,255));
 	ImageList_AddMasked(hChannelImgList,LoadBitmap(hinstance,MAKEINTRESOURCE(IDI_CHANNEL_VC)),RGB(255,0,255));
 	ImageList_AddMasked(hChannelImgList,LoadBitmap(hinstance,MAKEINTRESOURCE(IDI_CHANNEL_ANC)),RGB(255,0,255));
 	hInstance = hinstance;
@@ -272,6 +273,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 									  TVS_LINESATROOT | TVS_HASBUTTONS,
 								  90, 0, 128, rc.bottom - rc.top - 80, hwnd,
 								  (HMENU)103, hInstance, NULL);
+		TreeView_SetImageList(hChTree, hChannelImgList, 0);
 		hDMsList = CreateWindowExA(
 			WS_EX_CLIENTEDGE, WC_LISTVIEWA, NULL, WS_CHILD | WS_VISIBLE, 90, 0,
 			128, rc.bottom - rc.top - 80, hwnd, (HMENU)103, hInstance, NULL);
@@ -389,7 +391,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 				HTREEITEM hParent = TVI_ROOT;
 				int pfpidx = 0;
 				for (int i = 0; i < cnt; i++) {
-					if (dms[i].type == CHANNEL_TYPE_DM) {
+					if (dms[i].type == DM_CHANNEL) {
 						printf("%s\n", dms[i].receipents[0].Username);
 
 						if (dms[i].receipents[0].avatar) {
@@ -456,7 +458,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 								channel_compare, NULL, NULL);
 				for (int i = 0; i < ChannelCount; i++) {
 					char *VisualName;
-						VisualName = malloc(strlen(Channels[i].name+1));
+						VisualName = malloc(strlen(Channels[i].name)+1);
 						strcpy(VisualName, Channels[i].name);
 					TVINSERTSTRUCT tvInsert = {0};
 					HTREEITEM hParent = TVI_ROOT;
@@ -473,12 +475,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 					tvInsert.hParent = hParent; // Parent is the root item
 					tvInsert.hInsertAfter = TVI_LAST;
 					tvInsert.item.mask =
-						TVIF_TEXT | TVIF_PARAM | TVIF_STATE;
+						TVIF_TEXT | TVIF_PARAM | TVIF_STATE | TVIF_IMAGE;
 					tvInsert.item.pszText = (VisualName);
 					tvInsert.item.lParam = (LPARAM) & (Channels[i]);
 					tvInsert.item.state = TVIS_EXPANDED;
 					tvInsert.item.stateMask = TVIS_EXPANDED;
-					
+					if(Channels[i].type==GUILD_VOICE){
+						tvInsert.item.iImage=1;
+					}else if(Channels[i].type==GUILD_ANNOUNCEMENT){
+						tvInsert.item.iImage=2;
+					}else{
+						tvInsert.item.iImage=0;
+					}
 					HTREEITEM lres = (HTREEITEM)SendMessage(
 						hChTree, TVM_INSERTITEM, 0, (LPARAM)&tvInsert);
 					if (Channels[i].type == GUILD_CATEGORY) {

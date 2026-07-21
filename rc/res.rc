@@ -2,5 +2,6 @@
 
 IDI_BACKCORDIC RCDATA "backcord_icon.png"
 IDI_BACKCORDBANNERIC BITMAP "backcordbanner.bmp"
+IDI_CHANNEL_TC BITMAP "tc.bmp"
 IDI_CHANNEL_VC BITMAP "vc.bmp"
 IDI_CHANNEL_ANC BITMAP "anc.bmp"
