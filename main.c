@@ -72,11 +72,23 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, PSTR pCmdLine,
 	InitSnowsControls();
 	hSidePfps = ImageList_Create(32, 32, ILC_COLOR32 | ILC_MASK, 12, 1);
 	hChannelImgList = ImageList_Create(16, 16, ILC_COLOR32 | ILC_MASK, 8, 1);
-	ImageList_AddMasked(hChannelImgList,LoadBitmap(hinstance,MAKEINTRESOURCE(IDI_CHANNEL_CATEGORY)),RGB(255,0,255));
-	ImageList_AddMasked(hChannelImgList,LoadBitmap(hinstance,MAKEINTRESOURCE(IDI_CHANNEL_TC)),RGB(255,0,255));
-	ImageList_AddMasked(hChannelImgList,LoadBitmap(hinstance,MAKEINTRESOURCE(IDI_CHANNEL_VC)),RGB(255,0,255));
-	ImageList_AddMasked(hChannelImgList,LoadBitmap(hinstance,MAKEINTRESOURCE(IDI_CHANNEL_ANC)),RGB(255,0,255));
-	ImageList_AddMasked(hChannelImgList,LoadBitmap(hinstance,MAKEINTRESOURCE(IDI_CHANNEL_FORUM)),RGB(255,0,255));
+	ImageList_AddMasked(
+		hChannelImgList,
+		LoadBitmap(hinstance, MAKEINTRESOURCE(IDI_CHANNEL_CATEGORY)),
+		RGB(255, 0, 255));
+	ImageList_AddMasked(hChannelImgList,
+						LoadBitmap(hinstance, MAKEINTRESOURCE(IDI_CHANNEL_TC)),
+						RGB(255, 0, 255));
+	ImageList_AddMasked(hChannelImgList,
+						LoadBitmap(hinstance, MAKEINTRESOURCE(IDI_CHANNEL_VC)),
+						RGB(255, 0, 255));
+	ImageList_AddMasked(hChannelImgList,
+						LoadBitmap(hinstance, MAKEINTRESOURCE(IDI_CHANNEL_ANC)),
+						RGB(255, 0, 255));
+	ImageList_AddMasked(
+		hChannelImgList,
+		LoadBitmap(hinstance, MAKEINTRESOURCE(IDI_CHANNEL_FORUM)),
+		RGB(255, 0, 255));
 	hInstance = hinstance;
 	// register the window claws
 	const char CLASS_NAME[] = "BackcordMain";
@@ -133,7 +145,7 @@ void onDiscordGuildLoad(DiscordGuild *guild, char *id) {
 		wsprintfA(path, "%s%s.png", tempPath, guild->IconHash);
 		if (GetFileAttributesA(path) == INVALID_FILE_ATTRIBUTES) {
 			path = DiscordFetchTmpGuildIcon(guild->id,
-												  guild->IconHash); // testing
+											guild->IconHash); // testing
 		}
 		GuildView_SetIcon(hGSel, LoadPNGImage(path), id);
 		free(path);
@@ -182,7 +194,7 @@ void onDiscordReady(DiscordUser user, DiscordGuild *guilds, int guildscount) {
 		int DestH = ClientRect.bottom - ClientRect.top;
 
 		SendMessage(hPfpAreaPfp, STM_SETIMAGE, IMAGE_BITMAP,
-					(LPARAM)ResizeBitmap(LoadPNGBitmap(path),DestW,DestH));
+					(LPARAM)ResizeBitmap(LoadPNGBitmap(path), DestW, DestH));
 
 		free(path);
 	}
@@ -276,9 +288,16 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 								  90, 0, 128, rc.bottom - rc.top - 80, hwnd,
 								  (HMENU)103, hInstance, NULL);
 		TreeView_SetImageList(hChTree, hChannelImgList, 0);
-		hDMsList = CreateWindowExA(
-			WS_EX_CLIENTEDGE, WC_LISTVIEWA, NULL, WS_CHILD | WS_VISIBLE, 90, 0,
-			128, rc.bottom - rc.top - 80, hwnd, (HMENU)103, hInstance, NULL);
+		hDMsList = CreateWindowExA(WS_EX_CLIENTEDGE, WC_LISTVIEWA, NULL,
+								   WS_CHILD | WS_VISIBLE | LVS_REPORT, 90, 0,
+								   128, rc.bottom - rc.top - 80, hwnd,
+								   (HMENU)106, hInstance, NULL);
+		LVCOLUMN lvc = {0};
+		lvc.mask = LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
+		lvc.cx = 128;
+		lvc.pszText = "Direct Messages";
+		lvc.iSubItem = 0;
+		ListView_InsertColumn(hDMsList, 0, &lvc);
 		ShowWindow(hDMsList, SW_HIDE);
 		hMsgList = CreateWindowEx(0,			  // Optional window styles.
 								  "BackcordChat", // Window class
@@ -309,8 +328,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 						   NULL		  // Additional application data
 			);
 		hPfpAreaPfp = CreateWindowExA(
-			0, "STATIC", "", SS_BITMAP | WS_CHILD | WS_VISIBLE,
-			12, 24, 36, 36, hPfpArea, NULL, GetModuleHandle(NULL), NULL);
+			0, "STATIC", "", SS_BITMAP | WS_CHILD | WS_VISIBLE, 12, 24, 36, 36,
+			hPfpArea, NULL, GetModuleHandle(NULL), NULL);
 		hPfpAreaDispName = CreateWindowExA(
 			0, "STATIC", "Display Name", WS_CHILD | WS_VISIBLE, 54, 24, 144, 16,
 			hPfpArea, NULL, GetModuleHandle(NULL), NULL);
@@ -385,12 +404,13 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		if (pNMHDR.hwndFrom == hGSel) {
 			LPNMGUILDVIEW pnmv = (LPNMGUILDVIEW)lParam;
 			if (pnmv->index == GUILDVIEW_DMS) {
+				ShowWindow(hChTree, HIDE_WINDOW);
+				ShowWindow(hDMsList, 1);
 				DiscordChannel *dms;
 				int cnt = DiscordListPrivateChannels(&dms);
-				TreeView_DeleteAllItems(hChTree);
-				TreeView_SetImageList(hChTree, hSidePfps, TVSIL_NORMAL);
-				TVINSERTSTRUCT tvInsert = {0};
-				HTREEITEM hParent = TVI_ROOT;
+				ListView_DeleteAllItems(hDMsList);
+				ListView_SetImageList(hDMsList, hSidePfps, LVSIL_SMALL);
+				LVITEM lvItem = {0};
 				int pfpidx = 0;
 				for (int i = 0; i < cnt; i++) {
 					if (dms[i].type == CHANNEL_DM) {
@@ -424,29 +444,23 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 							}
 						}
 
-						tvInsert.hParent = hParent; // Parent is the root item
-						tvInsert.hInsertAfter = TVI_LAST;
-						tvInsert.item.mask = TVIF_TEXT | TVIF_PARAM | TVIF_STATE |
-											 TVIF_IMAGE;
-						tvInsert.item.pszText =
-							dms[i].receipents[0].DisplayName
-								? dms[i].receipents[0].DisplayName
-								: dms[i].receipents[0].Username;
-						tvInsert.item.lParam = (LPARAM) & (dms[i]);
-						tvInsert.item.state = TVIS_EXPANDED;
-						tvInsert.item.stateMask = TVIS_EXPANDED;
-						tvInsert.item.iImage =
+						lvItem.mask =
+							LVIF_TEXT | LVIF_PARAM | LVIF_STATE | LVIF_IMAGE;
+						lvItem.pszText = dms[i].receipents[0].DisplayName
+											 ? dms[i].receipents[0].DisplayName
+											 : dms[i].receipents[0].Username;
+						lvItem.lParam = (LPARAM) & (dms[i]);
+						lvItem.iImage =
 							dms[i].receipents[0].avatar ? pfpidx : 0;
-						tvInsert.item.iSelectedImage =
-							dms[i].receipents[0].avatar ? pfpidx : 0;
-						HTREEITEM lres = (HTREEITEM)SendMessage(
-							hChTree, TVM_INSERTITEM, 0, (LPARAM)&tvInsert);
+						ListView_InsertItem(hDMsList, &lvItem);
 						if (dms[i].receipents[0].avatar) {
 							pfpidx++;
 						}
 					}
 				}
 			} else {
+				ShowWindow(hChTree, 1);
+				ShowWindow(hDMsList, HIDE_WINDOW);
 				DiscordGuild *guild;
 				guild = pnmv->guild.data;
 
@@ -455,14 +469,15 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 					DiscordListGuildChannels(guild->id, &Channels);
 				TreeView_SelectItem(hChTree, NULL);
 				TreeView_DeleteAllItems(hChTree);
-				//TreeView_SetImageList(hChTree, hChannelImgList, TVSIL_NORMAL);
+				// TreeView_SetImageList(hChTree, hChannelImgList,
+				// TVSIL_NORMAL);
 				struct hashmap *ChannelUITable =
 					hashmap_new(sizeof(ChannelUIEntry), 0, 0, 0, channel_hash,
 								channel_compare, NULL, NULL);
 				for (int i = 0; i < ChannelCount; i++) {
 					char *VisualName;
-						VisualName = malloc(strlen(Channels[i].name)+1);
-						strcpy(VisualName, Channels[i].name);
+					VisualName = malloc(strlen(Channels[i].name) + 1);
+					strcpy(VisualName, Channels[i].name);
 					TVINSERTSTRUCT tvInsert = {0};
 					HTREEITEM hParent = TVI_ROOT;
 					if (Channels[i].parentID) {
@@ -483,17 +498,16 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 					tvInsert.item.lParam = (LPARAM) & (Channels[i]);
 					tvInsert.item.state = TVIS_EXPANDED;
 					tvInsert.item.stateMask = TVIS_EXPANDED;
-					if(Channels[i].type==GUILD_CATEGORY){
-						tvInsert.item.iImage=0;
-					}
-					else if(Channels[i].type==GUILD_VOICE){
-						tvInsert.item.iImage=2;
-					}else if(Channels[i].type==GUILD_ANNOUNCEMENT){
-						tvInsert.item.iImage=3;
-					}else if(Channels[i].type==GUILD_FORUM){
-						tvInsert.item.iImage=4;
-					}else{
-						tvInsert.item.iImage=1;
+					if (Channels[i].type == GUILD_CATEGORY) {
+						tvInsert.item.iImage = 0;
+					} else if (Channels[i].type == GUILD_VOICE) {
+						tvInsert.item.iImage = 2;
+					} else if (Channels[i].type == GUILD_ANNOUNCEMENT) {
+						tvInsert.item.iImage = 3;
+					} else if (Channels[i].type == GUILD_FORUM) {
+						tvInsert.item.iImage = 4;
+					} else {
+						tvInsert.item.iImage = 1;
 					}
 					HTREEITEM lres = (HTREEITEM)SendMessage(
 						hChTree, TVM_INSERTITEM, 0, (LPARAM)&tvInsert);
@@ -512,14 +526,16 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 				DiscordChannel *chnl = ((DiscordChannel *)pnmv->itemNew.lParam);
 				if (chnl->type != GUILD_CATEGORY) {
 					char *title = NULL;
-					if(chnl->type==CHANNEL_DM){
-					title = malloc(12 + strlen(chnl->receipents[0].DisplayName));
-					wsprintf(title, "Backcord - %s", chnl->receipents[0].DisplayName);
-					SetWindowTextA(hwnd, title);
-					}else{
-					title = malloc(13 + strlen(chnl->name));
-					wsprintf(title, "Backcord - #%s", chnl->name);
-					SetWindowTextA(hwnd, title);
+					if (chnl->type == CHANNEL_DM) {
+						title = malloc(12 +
+									   strlen(chnl->receipents[0].DisplayName));
+						wsprintf(title, "Backcord - %s",
+								 chnl->receipents[0].DisplayName);
+						SetWindowTextA(hwnd, title);
+					} else {
+						title = malloc(13 + strlen(chnl->name));
+						wsprintf(title, "Backcord - #%s", chnl->name);
+						SetWindowTextA(hwnd, title);
 					}
 					DiscordMessage *msgs;
 					int msgcnt = DiscordGetChannelHistory(chnl->id, 50, &msgs);
