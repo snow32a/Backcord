@@ -234,11 +234,16 @@ LRESULT CALLBACK ChatWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		for (int i = 0; i < cwnd->uimsgcnt; i++) {
 			RECT contr = {0, 0, clientRect.right - clientRect.left - 6 - 6 - 40,
 			              0};
+			if (strlen(cwnd->uimsgs[i].msg.content) == 0) {
+    		msgdet[i].TextContentHeight = 0;
+			}
+			else{
 			DrawTextA(hdc, cwnd->uimsgs[i].msg.content,
 			          strlen(cwnd->uimsgs[i].msg.content), &contr,
 			          DT_CALCRECT | DT_WORDBREAK);
-			// printf("%i | %i\n", i, contr.bottom - contr.top);
 			msgdet[i].TextContentHeight = contr.bottom - contr.top;
+			}
+			// printf("%i | %i\n", i, contr.bottom - contr.top);
 			msgdet[i].StartMsg = IsStartMsg(cwnd, i);
 			if (msgdet[i].StartMsg) {
 

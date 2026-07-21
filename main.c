@@ -72,9 +72,11 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, PSTR pCmdLine,
 	InitSnowsControls();
 	hSidePfps = ImageList_Create(32, 32, ILC_COLOR32 | ILC_MASK, 12, 1);
 	hChannelImgList = ImageList_Create(16, 16, ILC_COLOR32 | ILC_MASK, 8, 1);
+	ImageList_AddMasked(hChannelImgList,LoadBitmap(hinstance,MAKEINTRESOURCE(IDI_CHANNEL_CATEGORY)),RGB(255,0,255));
 	ImageList_AddMasked(hChannelImgList,LoadBitmap(hinstance,MAKEINTRESOURCE(IDI_CHANNEL_TC)),RGB(255,0,255));
 	ImageList_AddMasked(hChannelImgList,LoadBitmap(hinstance,MAKEINTRESOURCE(IDI_CHANNEL_VC)),RGB(255,0,255));
 	ImageList_AddMasked(hChannelImgList,LoadBitmap(hinstance,MAKEINTRESOURCE(IDI_CHANNEL_ANC)),RGB(255,0,255));
+	ImageList_AddMasked(hChannelImgList,LoadBitmap(hinstance,MAKEINTRESOURCE(IDI_CHANNEL_FORUM)),RGB(255,0,255));
 	hInstance = hinstance;
 	// register the window claws
 	const char CLASS_NAME[] = "BackcordMain";
@@ -391,7 +393,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 				HTREEITEM hParent = TVI_ROOT;
 				int pfpidx = 0;
 				for (int i = 0; i < cnt; i++) {
-					if (dms[i].type == DM_CHANNEL) {
+					if (dms[i].type == CHANNEL_DM) {
 						printf("%s\n", dms[i].receipents[0].Username);
 
 						if (dms[i].receipents[0].avatar) {
@@ -451,6 +453,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 				DiscordChannel *Channels;
 				int ChannelCount =
 					DiscordListGuildChannels(guild->id, &Channels);
+				TreeView_SelectItem(hChTree, NULL);
 				TreeView_DeleteAllItems(hChTree);
 				//TreeView_SetImageList(hChTree, hChannelImgList, TVSIL_NORMAL);
 				struct hashmap *ChannelUITable =
@@ -480,12 +483,17 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 					tvInsert.item.lParam = (LPARAM) & (Channels[i]);
 					tvInsert.item.state = TVIS_EXPANDED;
 					tvInsert.item.stateMask = TVIS_EXPANDED;
-					if(Channels[i].type==GUILD_VOICE){
-						tvInsert.item.iImage=1;
-					}else if(Channels[i].type==GUILD_ANNOUNCEMENT){
-						tvInsert.item.iImage=2;
-					}else{
+					if(Channels[i].type==GUILD_CATEGORY){
 						tvInsert.item.iImage=0;
+					}
+					else if(Channels[i].type==GUILD_VOICE){
+						tvInsert.item.iImage=2;
+					}else if(Channels[i].type==GUILD_ANNOUNCEMENT){
+						tvInsert.item.iImage=3;
+					}else if(Channels[i].type==GUILD_FORUM){
+						tvInsert.item.iImage=4;
+					}else{
+						tvInsert.item.iImage=1;
 					}
 					HTREEITEM lres = (HTREEITEM)SendMessage(
 						hChTree, TVM_INSERTITEM, 0, (LPARAM)&tvInsert);
@@ -503,9 +511,16 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 				pnmv->itemNew.state & TVIS_SELECTED) {
 				DiscordChannel *chnl = ((DiscordChannel *)pnmv->itemNew.lParam);
 				if (chnl->type != GUILD_CATEGORY) {
-					char *title = malloc(13 + strlen(chnl->name));
+					char *title = NULL;
+					if(chnl->type==CHANNEL_DM){
+					title = malloc(12 + strlen(chnl->receipents[0].DisplayName));
+					wsprintf(title, "Backcord - %s", chnl->receipents[0].DisplayName);
+					SetWindowTextA(hwnd, title);
+					}else{
+					title = malloc(13 + strlen(chnl->name));
 					wsprintf(title, "Backcord - #%s", chnl->name);
 					SetWindowTextA(hwnd, title);
+					}
 					DiscordMessage *msgs;
 					int msgcnt = DiscordGetChannelHistory(chnl->id, 50, &msgs);
 					ClearChatControl(hMsgList);
