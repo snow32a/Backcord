@@ -526,21 +526,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 				DiscordChannel *chnl = ((DiscordChannel *)pnmv->itemNew.lParam);
 				if (chnl->type != GUILD_CATEGORY) {
 					char *title = NULL;
-					if (chnl->type == CHANNEL_DM) {
-						title = malloc(12 +
-									   strlen(chnl->receipents[0].DisplayName));
-						wsprintf(title, "Backcord - %s",
-								 chnl->receipents[0].DisplayName);
-						SetWindowTextA(hwnd, title);
-					} else {
-						title = malloc(13 + strlen(chnl->name));
-						wsprintf(title, "Backcord - #%s", chnl->name);
-						SetWindowTextA(hwnd, title);
-					}
+					title = malloc(13 + strlen(chnl->name));
+					wsprintf(title, "Backcord - #%s", chnl->name);
+					SetWindowTextA(hwnd, title);
 					DiscordMessage *msgs;
 					int msgcnt = DiscordGetChannelHistory(chnl->id, 50, &msgs);
 					ClearChatControl(hMsgList);
-					ListView_DeleteAllItems(hMsgList);
 					if (curChannel)
 						free(curChannel);
 
@@ -566,12 +557,53 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 							InsertChatMessage((msgs[i]), hMsgList);
 						}
 					}
-					ListView_EnsureVisible(hMsgList, msgcnt - 1, FALSE);
 					free(title);
 					free(msgs);
 				}
 			}
 			break;
+		} else if (pNMHDR.hwndFrom == hDMsList) {
+			LPNMLISTVIEW pnmv = (LPNMLISTVIEW)lParam;
+			if (pNMHDR.code == LVN_ITEMCHANGED) {
+
+				LVITEM lvi = {};
+				lvi.mask = LVIF_PARAM;
+				lvi.iItem = pnmv->iItem;
+				lvi.iSubItem = 0;
+
+				ListView_GetItem(hDMsList, &lvi);
+				LPARAM itemData = lvi.lParam;
+
+				DiscordChannel *chnl = ((DiscordChannel *)itemData);
+				ClearChatControl(hMsgList);
+
+				DiscordMessage *msgs;
+				int msgcnt = DiscordGetChannelHistory(chnl->id, 50, &msgs);
+				ClearChatControl(hMsgList);
+				if (curChannel)
+					free(curChannel);
+				curChannel = strdup(chnl->id);
+				if (msgcnt > 0) {
+					for (int i = msgcnt - 1; i >= 0; i--) {
+						if (msgs[i].author.avatar) {
+							char tempPath[MAX_PATH];
+							DWORD len = GetTempPathA(MAX_PATH, tempPath);
+							char *path = malloc(
+								MAX_PATH + strlen(msgs[i].author.avatar) + 1);
+							wsprintfA(path, "%s%s.png", tempPath,
+									  msgs[i].author.avatar);
+							if (GetFileAttributesA(path) ==
+								INVALID_FILE_ATTRIBUTES) {
+								char *path = DiscordFetchTmpPfp(
+									msgs[i].author.id,
+									msgs[i].author.avatar); // testing
+							}
+							ChatView_SetUserPfp(path, msgs[i].author.id);
+						}
+						InsertChatMessage((msgs[i]), hMsgList);
+					}
+				}
+			}
 		}
 		break;
 	case WM_PAINT: {
