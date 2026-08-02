@@ -1,0 +1,28 @@
+# TODO
+- [X] Backportation of OpenSSL
+- [X] HTTP implementation
+- [X] WS implementation
+- [X] Working gateway
+- [X] Sending and receiving messages
+- [X] Listing Guilds
+- [X] Listing channels
+- [X] DMs support
+- [X] ChatView with proper message alignment
+- [X] Showing mention counts
+- [X] Keep-Alive HTTP implementation
+- [ ] Add support for GCs
+- [ ] Switch to keep-alive HTTP
+- [ ] Add support for guild folders
+- [ ] Use the root guild folder to order the guilds properly
+- [ ] File uploading
+- [ ] Marking unread messages as read
+- [ ] Editing & Deleting messages
+- [ ] NT3.51 shims
+- [ ] Attachements
+- [ ] Polls
+- [ ] Embeds & GIFs
+- [ ] Emojis
+- [ ] Pins
+- [ ] User profiles
+- [ ] Markdown & Links
+- [ ] Threads & Implementation of the Forum channels
