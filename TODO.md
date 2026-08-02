@@ -11,6 +11,7 @@
 - [X] Showing mention counts
 - [X] Keep-Alive HTTP implementation
 - [ ] Add support for GCs
+- [ ] Rendering replies
 - [ ] Switch to keep-alive HTTP
 - [ ] Add support for guild folders
 - [ ] Use the root guild folder to order the guilds properly
