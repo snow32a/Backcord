@@ -465,6 +465,49 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 						if (dms[i].receipents[0].avatar) {
 							pfpidx++;
 						}
+					} else if(dms[i].type==CHANNEL_GC){
+						printf("%s\n", dms[i].receipents[0].Username);
+
+						if (dms[i].receipents[0].avatar) {
+
+							char tempPath[MAX_PATH];
+							DWORD len = GetTempPathA(MAX_PATH, tempPath);
+							char path[MAX_PATH +
+									  strlen(dms[i].receipents[0].avatar) + 1];
+							wsprintfA(path, "%s%s.png", tempPath,
+									  dms[i].receipents[0].avatar);
+
+							if (GetFileAttributesA(path) ==
+								INVALID_FILE_ATTRIBUTES) {
+								char *path2 = DiscordFetchTmpPfp(
+									dms[i].receipents[0].id,
+									dms[i].receipents[0].avatar); // testing
+								ImageList_Add(
+									hSidePfps,
+									ResizeBitmap(LoadPNGBitmap(path2), 32, 32),
+									NULL);
+								free(path2);
+							} else {
+
+								ImageList_Add(
+									hSidePfps,
+									ResizeBitmap(LoadPNGBitmap(path), 32, 32),
+									NULL);
+							}
+						}
+
+						lvItem.mask =
+							LVIF_TEXT | LVIF_PARAM | LVIF_STATE | LVIF_IMAGE;
+						lvItem.pszText = dms[i].name ? dms[i].name : (dms[i].receipents[0].DisplayName
+											 ? dms[i].receipents[0].DisplayName
+											 : dms[i].receipents[0].Username);
+						lvItem.lParam = (LPARAM) & (dms[i]);
+						lvItem.iImage =
+							dms[i].receipents[0].avatar ? pfpidx : 0;
+						ListView_InsertItem(hDMsList, &lvItem);
+						if (dms[i].receipents[0].avatar) {
+							pfpidx++;
+						}
 					}
 				}
 			} else {

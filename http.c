@@ -159,9 +159,9 @@ int SendHTTPRequest(HTTPConnection *conn, const char *method,
 
 	strcat(headerbuf, "Connection: keep-alive\r\n");
 	strcat(headerbuf, "\r\n");
-	char dbg[64];
-	wsprintfA(dbg, "headerbuf len: %d", (int)strlen(headerbuf));
-	MessageBoxA(NULL, dbg, "debug", 0);
+	//char dbg[64];
+	//wsprintfA(dbg, "headerbuf len: %d", (int)strlen(headerbuf));
+	//MessageBoxA(NULL, dbg, "debug", 0);
 	if (SSL_write(conn->ssl, headerbuf, (int)strlen(headerbuf)) <= 0) {
 		MessageBoxA(NULL, "SSL_write headers failed :(",
 					"sad http announcement", 0);
