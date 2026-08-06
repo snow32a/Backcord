@@ -10,9 +10,9 @@
 - [X] ChatView with proper message alignment
 - [X] Showing mention counts
 - [X] Keep-Alive HTTP implementation
+- [X] Switch to keep-alive HTTP use
 - [ ] Add support for GCs
 - [ ] Rendering replies
-- [ ] Switch to keep-alive HTTP
 - [ ] Add support for guild folders
 - [ ] Use the root guild folder to order the guilds properly
 - [ ] File uploading

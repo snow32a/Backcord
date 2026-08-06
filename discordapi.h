@@ -13,3 +13,5 @@ int DiscordGetChannelHistory(const char* channelID, unsigned int amount, Discord
 char *DiscordFetchTmpPfp(char *userID, char *hash);
 char *DiscordFetchTmpGuildIcon(char *guildID, char *hash);
 int DiscordListPrivateChannels(DiscordChannel** out);
+int DiscordHTTPConnect();
+void DiscordHTTPClose();

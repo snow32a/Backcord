@@ -1,6 +1,7 @@
 #include "discordtypes.h"
 #include "http.h"
 #include "config.h"
+#include <openssl/core.h>
 #include <windows.h>
 #include <winnt.h>
 #include <winternl.h>
@@ -12,6 +13,8 @@
 hmap GuildsTable = NULL;
 hmap ChannelsTable = NULL;
 DiscordChannel *PrivateChannels = NULL;
+HTTPConnection* maincon;
+HTTPConnection* cdncon;
 int PrivateChannelCount = 0;
 static uint64_t GuildHash(const void *item, uint64_t seed0, uint64_t seed1) {
 	const DiscordGuild *e = item;
@@ -33,6 +36,15 @@ static void ChannelFree(void *item) {}
 extern void onDiscordGuildLoad(DiscordGuild *guild, char *id);
 extern void onDiscordUpdatedGuildReadState(DiscordGuild gld);
 extern void onDiscordReady(DiscordUser user, DiscordGuild *guilds, int guildscount);
+int DiscordHTTPConnect(){
+	maincon=HTTPConnect("discord.com");
+	cdncon=HTTPConnect("cdn.discordapp.com");
+	return maincon->connected && cdncon->connected;
+}
+void DiscordHTTPClose(){
+	CloseHTTPConnection(maincon);
+	CloseHTTPConnection(cdncon);
+}
 int DiscordSendMessage(const char *channelID, const char *content) {
 	cJSON *payload = cJSON_CreateObject();
 	cJSON *name = cJSON_CreateString(content);
@@ -46,8 +58,8 @@ int DiscordSendMessage(const char *channelID, const char *content) {
 	char *payld = cJSON_Print(payload);
 	long resplen;
 	char headers[17 + strlen(token) + 1];
-	wsprintf(headers, "Authorization: %s\r\n", token);
-	SendShortHTTPReq("discord.com", "POST", endpoint, headers, user_agent,
+	wsprintf(headers, "Authorization: %s", token);
+	SendHTTPRequest(maincon,"POST", endpoint, headers, user_agent,
 					 "application/json", payld, strlen(payld), &forNothingGng,
 					 &resplen);
 	free(payld);
@@ -74,8 +86,8 @@ char *DiscordFetchTmpPfp(char *userID, char *hash) {
 	char *HTTPResp;
 	long resplen;
 	char headers[17 + strlen(token) + 1];
-	wsprintf(headers, "Authorization: %s\r\n", token);
-	SendShortHTTPReq("cdn.discordapp.com", "GET", endpoint, headers, user_agent,
+	wsprintf(headers, "Authorization: %s", token);
+	SendHTTPRequest(cdncon, "GET", endpoint, headers, user_agent,
 					 "application/json", NULL, 0, &HTTPResp, &resplen);
 	free(endpoint);
 
@@ -105,8 +117,8 @@ char *DiscordFetchTmpGuildIcon(char *guildID, char *hash) {
 	char *HTTPResp;
 	long resplen;
 	char headers[17 + strlen(token) + 1];
-	wsprintf(headers, "Authorization: %s\r\n", token);
-	SendShortHTTPReq("cdn.discordapp.com", "GET", endpoint, headers, user_agent,
+	wsprintf(headers, "Authorization: %s", token);
+	SendHTTPRequest(cdncon, "GET", endpoint, headers, user_agent,
 					 "application/json", NULL, 0, &HTTPResp, &resplen);
 	free(endpoint);
 
@@ -146,9 +158,9 @@ int DiscordGetChannelHistory(const char *channelID, unsigned int amount,
 	long resplen;
 
 	char headers[17 + strlen(token) + 1];
-	wsprintf(headers, "Authorization: %s\r\n", token);
+	wsprintf(headers, "Authorization: %s", token);
 
-	SendShortHTTPReq("discord.com", "GET", endpoint, headers, user_agent,
+	SendHTTPRequest(maincon, "GET", endpoint, headers, user_agent,
 					 "application/json", NULL, 0, &HTTPResp, &resplen);
 	cJSON *resp = cJSON_Parse(HTTPResp);
 	if (!resp)

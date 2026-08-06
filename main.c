@@ -264,6 +264,15 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		HFONT BoldSysFont = CreateFontIndirect(&ncm.lfMessageFont);
 
 		InitHTTP();
+		/* HTTPConnection* hc = HTTPConnect("httpbin.org");
+		  long responselen;
+		  char* response;
+		  SendHTTPRequest(hc, "GET", "/get", "", user_agent, NULL, NULL, 0, &response, &responselen);
+		  MessageBoxA(NULL,response,"HTTP Test",0);
+		  if(responselen==strlen(response)){
+		  MessageBoxA(NULL,"pass","HTTP Test",0);
+	}*/
+		DiscordHTTPConnect();
 
 		RECT rc;
 		GetClientRect(hwnd, &rc);
@@ -623,6 +632,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		PostQuitMessage(0);
 	case WM_DESTROY:
 		CleanupHTTP();
+		DiscordHTTPClose();
 		return TRUE;
 		break;
 	}
