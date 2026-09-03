@@ -419,6 +419,9 @@ LRESULT CALLBACK ChatWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		InvalidateRect(hwnd, NULL, FALSE);
 		break;
 	}
+	case WM_SIZE:
+		InvalidateRect(hwnd, NULL, 0);
+		break;
 	case WM_DESTROY:
 		break;
 	}

@@ -9,6 +9,7 @@ typedef struct {
     SSL_CTX* ctx;
     char hostname[256];
     int connected;
+    CRITICAL_SECTION lock;
 } HTTPConnection;
 void InitSockets();
 int SendShortHTTPReq(const char *hostname, const char *reqtype,

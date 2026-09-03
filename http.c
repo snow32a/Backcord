@@ -1,4 +1,5 @@
 #include "http.h"
+#include <synchapi.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <windows.h>
@@ -42,6 +43,7 @@ char *ProcessChunkedTransfer(char *chunked, size_t chunked_len,
 HTTPConnection *HTTPConnect(const char *hostname) {
 	HTTPConnection *conn = malloc(sizeof(HTTPConnection));
 	RtlZeroMemory(conn, sizeof(HTTPConnection));
+	InitializeCriticalSection(&conn->lock);
 
 	strncpy(conn->hostname, hostname, 255);
 	conn->hostname[255] = '\0';
@@ -132,7 +134,7 @@ int SendHTTPRequest(HTTPConnection *conn, const char *method,
 					"sad http announcement", 0);
 		return 1;
 	}
-
+	EnterCriticalSection(&conn->lock);
 	char headerbuf[4096];
 	RtlZeroMemory(headerbuf, sizeof(headerbuf));
 
@@ -286,6 +288,7 @@ int SendHTTPRequest(HTTPConnection *conn, const char *method,
 		*responselen = (long)body_len;
 		free(buffer);
 	}
+	LeaveCriticalSection(&conn->lock);
 	return 0;
 }
 int CloseHTTPConnection(HTTPConnection *conn) {
@@ -305,7 +308,7 @@ int CloseHTTPConnection(HTTPConnection *conn) {
 	if (conn->sock != INVALID_SOCKET) {
 		closesocket(conn->sock);
 	}
-
+	DeleteCriticalSection(&conn->lock);
 	free(conn);
 	return 0;
 }

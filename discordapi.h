@@ -11,7 +11,8 @@ int DiscordListGuildChannels(char* guildID, DiscordChannel** out);
 #define GUILD_FORUM 15
 int DiscordGetChannelHistory(const char* channelID, unsigned int amount, DiscordMessage** msgs);
 char *DiscordFetchTmpPfp(char *userID, char *hash);
-char *DiscordFetchTmpGuildIcon(char *guildID, char *hash);
+char *DiscordFetchTmpGuildIcon(char *channelID, char *hash);
+char *DiscordFetchTmpChannelIcon(char *guildID, char *hash);
 int DiscordListPrivateChannels(DiscordChannel** out);
 int DiscordHTTPConnect();
 void DiscordHTTPClose();

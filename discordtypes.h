@@ -28,6 +28,7 @@ typedef struct {
 	DiscordUser* receipents;
 	ReadState ReadState;
 	char* GuildID;
+    char* icon;
 } DiscordChannel;
 typedef struct {
     char *id;

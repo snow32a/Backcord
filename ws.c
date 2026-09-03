@@ -106,7 +106,7 @@ DWORD WINAPI WSThreadProc(LPVOID ssl) {
 
 		if (length != 0 && result != 0) {
 			WebSocketOnDataArrival(ssl, buffer, length);
-			printf("%s\n", buffer);
+			// printf("%s\n", buffer);
 			// LE IMPORTANT: free the buffer after processing... memleak goez
 			// brr otherewise
 			free(buffer);

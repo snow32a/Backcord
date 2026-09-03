@@ -111,6 +111,37 @@ char *DiscordFetchTmpPfp(char *userID, char *hash) {
 	free(HTTPResp);
 	return path;
 }
+char *DiscordFetchTmpChannelIcon(char *userID, char *hash) {
+	char *endpoint = malloc(80);
+	wsprintfA(endpoint, "/channel-icons/%s/%s.png?size=64", userID, hash);
+	char *HTTPResp;
+	long resplen;
+	char headers[17 + strlen(token) + 1];
+	wsprintf(headers, "Authorization: %s", token);
+	SendHTTPRequest(cdncon, "GET", endpoint, headers, user_agent,
+					 "application/json", NULL, 0, &HTTPResp, &resplen);
+	free(endpoint);
+
+	char tempPath[MAX_PATH];
+
+	DWORD len = GetTempPathA(MAX_PATH, tempPath);
+	char *path = malloc(MAX_PATH + strlen(hash) + 1);
+	wsprintfA(path, "%s%s.png", tempPath, hash);
+	HANDLE file = CreateFileA(path, GENERIC_READ | GENERIC_WRITE, 0, NULL,
+							  CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	DWORD written;
+	if (file == INVALID_HANDLE_VALUE) {
+		MessageBoxA(NULL,
+					"oof, failed opening the file to save the tmp pfp file!",
+					"Backcord - DiscordFetchTmpChannelIcon", 0);
+		free(path);
+		return NULL;
+	}
+	WriteFile(file, HTTPResp, resplen, &written, NULL);
+	CloseHandle(file);
+	free(HTTPResp);
+	return path;
+}
 char *DiscordFetchTmpGuildIcon(char *guildID, char *hash) {
 	char *endpoint = malloc(80);
 	wsprintfA(endpoint, "/icons/%s/%s.png?size=512", guildID, hash);
@@ -237,6 +268,7 @@ void HandleREADY(cJSON *json) {
 
 		cJSON *chName = cJSON_GetObjectItem(ch, "name");
 		cJSON *chType = cJSON_GetObjectItem(ch, "type");
+		cJSON *chIc = cJSON_GetObjectItem(ch, "icon");
 		cJSON *chId = cJSON_GetObjectItem(ch, "id");
 		cJSON *chPid = cJSON_GetObjectItem(ch, "parent_id");
 		cJSON *chRecp = cJSON_GetObjectItem(ch, "recipients");
@@ -251,6 +283,10 @@ void HandleREADY(cJSON *json) {
 		PrivateChannels[j].parentID = (chPid && cJSON_IsString(chPid))
 										  ? strdup(chPid->valuestring)
 										  : NULL;
+		PrivateChannels[j].icon = (chIc && cJSON_IsString(chIc))
+										  ? strdup(chIc->valuestring)
+										  : NULL;
+		PrivateChannels[j].receipentCount=cJSON_GetArraySize(chRecp);
 		PrivateChannels[j].receipents =
 			malloc(cJSON_GetArraySize(chRecp) * sizeof(DiscordUser));
 		for (int i = 0; i < cJSON_GetArraySize(chRecp); i++) {

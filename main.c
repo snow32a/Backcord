@@ -19,6 +19,8 @@
 static DiscordMessage *PendingRndMsg = NULL;
 static DiscordMessage *LastRndMsg = NULL; // rnd is render NOT random :sob:
 char *curChannel;
+int atDMs = 0;
+int DMBio = 0;
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 static HWND hWnd;
 static HWND hMsg;
@@ -35,10 +37,14 @@ static HWND hPfpAreaDispName;
 static HWND hPfpAreaUserName;
 static HIMAGELIST hSidePfps;
 static HIMAGELIST hChannelImgList;
+static HIMAGELIST hMemListPfps;
+
+static HWND hSidePanel;
+static HWND hMemList;
+
 HINSTANCE hInstance;
 SSL *GatewaySSL;
 char *token;
-HWND hDMsProfileSide;
 int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, PSTR pCmdLine,
 				   int nCmdShow) {
 #ifdef test_token
@@ -72,6 +78,8 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hPrevInstance, PSTR pCmdLine,
 	InitSnowsControls();
 	hSidePfps = ImageList_Create(32, 32, ILC_COLOR32 | ILC_MASK, 12, 1);
 	hChannelImgList = ImageList_Create(16, 16, ILC_COLOR32 | ILC_MASK, 8, 1);
+	hMemListPfps = ImageList_Create(32, 32, ILC_COLOR32 | ILC_MASK, 8, 1);
+
 	ImageList_AddMasked(
 		hChannelImgList,
 		LoadBitmap(hinstance, MAKEINTRESOURCE(IDI_CHANNEL_CATEGORY)),
@@ -252,6 +260,28 @@ LRESULT CALLBACK MsgBarSubclassProc(HWND hwnd, UINT msg, WPARAM wParam,
 	}
 	return CallWindowProc(msgoldwndproc, hwnd, msg, wParam, lParam);
 }
+void RelayoutMainWindow(HWND hwnd) {
+	RECT rc;
+	GetClientRect(hwnd, &rc);
+	int width = rc.right - rc.left;
+	int height = rc.bottom - rc.top;
+
+	SetWindowPos(hPfpArea, NULL, 0, height - 80, 0, 0,
+				 SWP_NOSIZE | SWP_NOZORDER);
+	SetWindowPos(hGSel, NULL, 0, 0, 90, height - 80, SWP_NOZORDER);
+	SetWindowPos(hMsg, NULL, 128 + 90, height - 25, width - 128 - 90 - 25, 25,
+				 SWP_NOZORDER);
+	SetWindowPos(hChTree, NULL, 90, 0, 128, height - 80, SWP_NOZORDER);
+	SetWindowPos(hMsgList, NULL, 128 + 90, 0,
+				 width - 128 - 90 - (DMBio ? 240 : 160), height - 25,
+				 SWP_NOZORDER);
+	SetWindowPos(hMemList, NULL, width - 160, 0, 160, height - 25,
+				 SWP_NOZORDER);
+	SetWindowPos(hSidePanel, NULL, width - 240, 0, 240, height - 25,
+				 SWP_NOZORDER);
+	SetWindowPos(hSend, NULL, width - 25, height - 25, 25, 25,
+				 SWP_NOZORDER | SWP_NOSIZE);
+}
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 							LPARAM lParam) {
 	switch (uMsg) {
@@ -267,8 +297,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		/* HTTPConnection* hc = HTTPConnect("httpbin.org");
 		  long responselen;
 		  char* response;
-		  SendHTTPRequest(hc, "GET", "/get", "", user_agent, NULL, NULL, 0, &response, &responselen);
-		  MessageBoxA(NULL,response,"HTTP Test",0);
+		  SendHTTPRequest(hc, "GET", "/get", "", user_agent, NULL, NULL, 0,
+	&response, &responselen); MessageBoxA(NULL,response,"HTTP Test",0);
 		  if(responselen==strlen(response)){
 		  MessageBoxA(NULL,"pass","HTTP Test",0);
 	}*/
@@ -380,6 +410,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 			hInstance,	  // Instance handle
 			NULL		  // Additional application data
 		);
+		hMemList = CreateWindowExA(0, "SysListView32", "Members List",
+								   LVS_REPORT | WS_CHILD | WS_VISIBLE,
+								   rc.right - 160, 0, 160, rc.bottom - 25, hwnd,
+								   NULL, GetModuleHandle(NULL), NULL);
+
+		LVCOLUMN lvm = {0};
+		lvm.mask = LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
+		lvm.cx = 160;
+		lvm.pszText = "Members";
+		lvm.iSubItem = 0;
+		ListView_InsertColumn(hMemList, 0, &lvm);
+		ListView_SetImageList(hMemList, hMemListPfps, 0);
 		SendMessage(hSend, WM_SETFONT, (WPARAM)regfont, 0);
 		OpenWebSocket("gateway.discord.gg", "/?encoding=json&v=9", &GatewaySSL);
 		return 0;
@@ -393,10 +435,16 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		SetWindowPos(hMsg, NULL, 128 + 90, height - 25, width - 128 - 90 - 25,
 					 25, SWP_NOZORDER);
 		SetWindowPos(hChTree, NULL, 90, 0, 128, height - 80, SWP_NOZORDER);
-		SetWindowPos(hMsgList, NULL, 128 + 90, 0, width - 128 - 90, height - 25,
+		SetWindowPos(hMsgList, NULL, 128 + 90, 0,
+					 width - 128 - 90 - (atDMs ? 240 : 160), height - 25,
+					 SWP_NOZORDER);
+		SetWindowPos(hMemList, NULL, width - 160, 0, 160, height - 25,
+					 SWP_NOZORDER);
+		SetWindowPos(hSidePanel, NULL, width - 240, 0, 240, height - 25,
 					 SWP_NOZORDER);
 		SetWindowPos(hSend, NULL, width - 25, height - 25, 25, 25,
 					 SWP_NOZORDER | SWP_NOSIZE);
+
 		return 0;
 		break;
 	}
@@ -413,16 +461,28 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		if (pNMHDR.hwndFrom == hGSel) {
 			LPNMGUILDVIEW pnmv = (LPNMGUILDVIEW)lParam;
 			if (pnmv->index == GUILDVIEW_DMS) {
-				ShowWindow(hChTree, HIDE_WINDOW);
-				ShowWindow(hDMsList, 1);
+				atDMs = true;
+
+				
+						ShowWindow(hMemList, HIDE_WINDOW);
+						ShowWindow(hSidePanel, 1);
+				SetWindowPos(hwnd, NULL, 0, 0, 0, 0,
+							 SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE |
+								 SWP_FRAMECHANGED | SWP_NOSIZE);
 				DiscordChannel *dms;
 				int cnt = DiscordListPrivateChannels(&dms);
 				ListView_DeleteAllItems(hDMsList);
 				ListView_SetImageList(hDMsList, hSidePfps, LVSIL_SMALL);
+
+				ShowWindow(hChTree, HIDE_WINDOW);
+				ShowWindow(hDMsList, 1);
+				RelayoutMainWindow(hwnd);
+				
 				LVITEM lvItem = {0};
 				int pfpidx = 0;
 				for (int i = 0; i < cnt; i++) {
 					if (dms[i].type == CHANNEL_DM) {
+
 						printf("%s\n", dms[i].receipents[0].Username);
 
 						if (dms[i].receipents[0].avatar) {
@@ -465,23 +525,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 						if (dms[i].receipents[0].avatar) {
 							pfpidx++;
 						}
-					} else if(dms[i].type==CHANNEL_GC){
-						printf("%s\n", dms[i].receipents[0].Username);
-
-						if (dms[i].receipents[0].avatar) {
-
+					} else if (dms[i].type == CHANNEL_GC) {
+						if (dms[i].icon) {
 							char tempPath[MAX_PATH];
 							DWORD len = GetTempPathA(MAX_PATH, tempPath);
-							char path[MAX_PATH +
-									  strlen(dms[i].receipents[0].avatar) + 1];
-							wsprintfA(path, "%s%s.png", tempPath,
-									  dms[i].receipents[0].avatar);
+							char path[MAX_PATH + strlen(dms[i].icon) + 1];
+							wsprintfA(path, "%s%s.png", tempPath, dms[i].icon);
 
 							if (GetFileAttributesA(path) ==
 								INVALID_FILE_ATTRIBUTES) {
-								char *path2 = DiscordFetchTmpPfp(
-									dms[i].receipents[0].id,
-									dms[i].receipents[0].avatar); // testing
+								char *path2 = DiscordFetchTmpChannelIcon(
+									dms[i].id,
+									dms[i].icon); // testing
 								ImageList_Add(
 									hSidePfps,
 									ResizeBitmap(LoadPNGBitmap(path2), 32, 32),
@@ -498,21 +553,58 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 
 						lvItem.mask =
 							LVIF_TEXT | LVIF_PARAM | LVIF_STATE | LVIF_IMAGE;
-						lvItem.pszText = dms[i].name ? dms[i].name : (dms[i].receipents[0].DisplayName
-											 ? dms[i].receipents[0].DisplayName
-											 : dms[i].receipents[0].Username);
+						char *FallbackGCName = NULL;
+						size_t nFbGC = 0;
+
+						for (int k = 0; k < dms[i].receipentCount; k++) {
+							char *recname =
+								dms[i].receipents[k].DisplayName
+									? dms[i].receipents[k].DisplayName
+									: dms[i].receipents[k].Username;
+
+							size_t len = strlen(recname);
+							size_t sep = FallbackGCName ? 3 : 0;
+
+							char *tmp =
+								realloc(FallbackGCName, nFbGC + sep + len + 1);
+							if (!tmp) {
+								free(FallbackGCName);
+								FallbackGCName = NULL;
+								break;
+							}
+
+							FallbackGCName = tmp;
+
+							if (sep) {
+								memcpy(FallbackGCName + nFbGC, " & ", 3);
+								nFbGC += 3;
+							}
+
+							memcpy(FallbackGCName + nFbGC, recname, len);
+							nFbGC += len;
+
+							FallbackGCName[nFbGC] = '\0';
+						}
+						// FallbackGCName[nFbGC] = '\0';
+						lvItem.pszText = dms[i].name && strlen(dms[i].name)
+											 ? dms[i].name
+											 : FallbackGCName;
 						lvItem.lParam = (LPARAM) & (dms[i]);
-						lvItem.iImage =
-							dms[i].receipents[0].avatar ? pfpidx : 0;
+						lvItem.iImage = dms[i].icon ? pfpidx : 0;
 						ListView_InsertItem(hDMsList, &lvItem);
-						if (dms[i].receipents[0].avatar) {
+						free(FallbackGCName);
+						if (dms[i].icon) {
 							pfpidx++;
 						}
 					}
 				}
 			} else {
+				atDMs = false;
+				ShowWindow(hMemList, 1);
+				ShowWindow(hSidePanel, HIDE_WINDOW);
 				ShowWindow(hChTree, 1);
 				ShowWindow(hDMsList, HIDE_WINDOW);
+				RelayoutMainWindow(hwnd);
 				DiscordGuild *guild;
 				guild = pnmv->guild.data;
 
@@ -582,6 +674,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 					wsprintf(title, "Backcord - #%s", chnl->name);
 					SetWindowTextA(hwnd, title);
 					DiscordMessage *msgs;
+
 					int msgcnt = DiscordGetChannelHistory(chnl->id, 50, &msgs);
 					ClearChatControl(hMsgList);
 					if (curChannel)
@@ -616,8 +709,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 			break;
 		} else if (pNMHDR.hwndFrom == hDMsList) {
 			LPNMLISTVIEW pnmv = (LPNMLISTVIEW)lParam;
-			if (pNMHDR.code == LVN_ITEMCHANGED) {
-
+			if (pNMHDR.code == LVN_ITEMCHANGED &&
+				(pnmv->uNewState & LVIS_SELECTED) &&
+				!(pnmv->uOldState & LVIS_SELECTED)) {
 				LVITEM lvi = {};
 				lvi.mask = LVIF_PARAM;
 				lvi.iItem = pnmv->iItem;
@@ -627,6 +721,24 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 				LPARAM itemData = lvi.lParam;
 
 				DiscordChannel *chnl = ((DiscordChannel *)itemData);
+				if(chnl->type == CHANNEL_GC){
+					DMBio=0;
+					ShowWindow(hMemList, 1);
+					ShowWindow(hSidePanel, 0);
+					RelayoutMainWindow(hwnd);
+					for(int i = 0; i<chnl->receipentCount;i++){
+						LVITEMA recpitem={0};
+						recpitem.pszText=chnl->receipents[i].DisplayName ? chnl->receipents[i].DisplayName : chnl->receipents[i].Username;
+						recpitem.mask=LVIF_TEXT;
+						recpitem.iItem = i;
+						ListView_InsertItem(hMemList,&recpitem);
+					}
+				}else{
+					DMBio=1;
+					ShowWindow(hMemList, 0);
+					ShowWindow(hSidePanel, 1);
+					RelayoutMainWindow(hwnd);
+				}
 				ClearChatControl(hMsgList);
 
 				DiscordMessage *msgs;
